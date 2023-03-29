@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from .forms.LoginForm import LoginForm
 from .forms.RegisterForm import RegisterForm
@@ -11,6 +11,8 @@ auth = Blueprint("auth", __name__, template_folder="../templates")
 
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
+    if not current_user.is_anonymous:
+        abort(404)
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -18,18 +20,21 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for('views.home'))
-        return render_template("login.html", form=form, message="Неправильный логин или пароль")
-    return render_template("login.html", form=form)
+        return render_template("login.html", form=form, message="Неправильный логин или пароль", user=current_user)
+    return render_template("login.html", form=form, user=current_user)
 
 
 @auth.route("/sign-up", methods=['GET', 'POST'])
 def sign_up():
+    if not current_user.is_anonymous:
+        abort(404)
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Пароли не совпадают")
+                                   message="Пароли не совпадают",
+                                   user=current_user)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
@@ -42,10 +47,12 @@ def sign_up():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
-    return render_template("signup.html", title='Sign up', form=form)
+        return redirect(url_for('auth.login'))
+    return render_template("signup.html", title='Sign up', form=form, user=current_user)
 
 
-@auth.route("/logout")
+@auth.route('/logout')
+@login_required
 def logout():
-    return redirect(url_for("views.home"))
+    logout_user()
+    return redirect("/")

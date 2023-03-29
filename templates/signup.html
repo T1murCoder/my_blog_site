@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Регистрация</h1>
-<div class="container">
+
+<div class="container row">
+<div class="col-lg-5 col-sm-7 mx-auto">
 <form action="" method="post">
+    <h3 align="center ">Sign up</h1>
     {{ form.hidden_tag() }}
     <p>
       {{ form.name.label }}<br>
@@ -41,8 +43,13 @@
             </p>
         {% endfor %}
     </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-    {{message}}
+    <p>{{ form.submit(type="submit", class="btn btn-primary mx-auto d-block col-lg-3 col-sm-5") }}</p>
+    {% if message %}
+    <div class="alert alert-warning" role="alert">
+      {{message}}
+  </div>
+{% endif %}
 </form>
+</div>
 </div>
 {% endblock %}
