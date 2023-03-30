@@ -29,6 +29,10 @@
     transition: all 0.3s;
 }
 
+.post-card {
+    margin: 15px;
+}
+
 
 #wrapper {
     margin-right: 0px;
