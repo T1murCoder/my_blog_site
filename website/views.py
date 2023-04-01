@@ -9,3 +9,9 @@ views = Blueprint("views", __name__, template_folder="../templates")
 @views.route("/home")
 def home():
     return render_template("home.html", title='Home', user=current_user)
+
+
+@views.route("/like/<int:post_id>")
+@login_required
+def like_post(post_id):
+    return str(post_id)

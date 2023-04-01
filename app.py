@@ -14,9 +14,11 @@ def create_app():
 
     from website.views import views
     from website.auth import auth
+    from website.admin import admin
 
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
+    app.register_blueprint(admin, url_prefix="/admin")
     
     @login_manager.user_loader
     def load_user(user_id):
@@ -33,4 +35,4 @@ def create_app():
 if __name__ == "__main__":
     db_session.global_init("db/users.db")
     app = create_app()
-    app.run(port=8080, host='0.0.0.0')
+    app.run(port=8080, host='127.0.0.1')
