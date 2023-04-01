@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container row">
+    <div class="col-lg-5 col-sm-7 mx-auto">
+  <form method="POST">
+    <h3 align="center">Create a post</h3>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.post_url.label }}<br>
+        {{ form.post_url(class="form-control", type="url") }}<br>
+        {% for error in form.post_url.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary mx-auto d-block col-lg-3 col-sm-5") }}</p>
+    {% if message %}
+        <div class="alert alert-warning" role="alert">
+          {{message}}
+      </div>
+    {% endif %}
+  </form>
+  </div>
+
+
+{% endblock %}

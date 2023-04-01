@@ -31,15 +31,15 @@ def sign_up():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('register.html', title='Регистрация',
+            return render_template('signup.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают",
                                    user=current_user)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template('register.html', title='Регистрация',
+            return render_template('signup.html', title='Регистрация',
                                    form=form,
-                                   message="Такой пользователь уже есть")
+                                   message="Такой пользователь уже есть", user=current_user)
         user = User(
             name=form.name.data,
             email=form.email.data
