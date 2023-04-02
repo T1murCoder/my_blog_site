@@ -57,14 +57,14 @@ def create_post():
     return render_template("create_post.html", title='Create post', form=form, user=current_user)
 
 
-@admin.route('/view_posts')
+@admin.route('/view-posts')
 @login_required
 @admin_required
 def view_posts():
     return "All posts"
 
 
-@admin.route('/delete_post/<int:post_id>')
+@admin.route('/delete-post/<int:post_id>')
 @login_required
 @admin_required
 def delete_posts(post_id):
