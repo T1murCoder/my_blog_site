@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from .forms.admin.CreatePostForm import CreatePostForm
 from data import db_session
 
-admin = Blueprint("admin", __name__, template_folder="../templates/admin")
+admin = Blueprint("admin", __name__, template_folder="../templates/admin", static_folder="../static")
 
 @admin.route("/create-post", methods=['GET', 'POST'])
 @login_required
