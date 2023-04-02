@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, abort
+from functools import wraps
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from .forms.admin.CreatePostForm import CreatePostForm
 from data.news_posts import NewsPost
@@ -7,14 +8,26 @@ from data import db_session
 admin = Blueprint("admin", __name__, template_folder="../templates/admin", static_folder="../static")
 
 
+def admin_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if current_user.admin:
+            return func(*args, **kwargs)
+        else:
+            abort(404)
+    return decorated_view
+
+
 @admin.route('/')
 @login_required
+@admin_required
 def admin_panel():
     return render_template('admin_panel.html', title="Admin panel", user=current_user)
 
 
 @admin.route("/create-post", methods=['GET', 'POST'])
 @login_required
+@admin_required
 def create_post():
     form = CreatePostForm()
     
