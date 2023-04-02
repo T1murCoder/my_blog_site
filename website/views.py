@@ -11,7 +11,7 @@ views = Blueprint("views", __name__, template_folder="../templates")
 def home():
     db_sess = db_session.create_session()
     
-    posts = db_sess.query(NewsPost).all()
+    posts = db_sess.query(NewsPost).all()[::-1]
     
     return render_template("home.html", title='Home', posts=posts, user=current_user)
 

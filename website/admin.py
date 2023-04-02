@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, redirect, url_for
 from functools import wraps
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from .forms.admin.CreatePostForm import CreatePostForm
@@ -38,21 +38,48 @@ def create_post():
         try:
             domain = url.split('/')[2]
         except IndexError:
-            return "Это не ссылка!"
+            return render_template("create_post.html", title='Create post', form=form, message="Это не ссылка!", user=current_user)
         
         if not (domain == "t.me" or domain == "telegram.me"):
-            return "Вы указали неправильную ссылку!"
+            return render_template("create_post.html", title='Create post', form=form, message="Вы указали неправильную ссылку!", user=current_user)
         
         url = url.split('/', 3)[-1]
         url_exists = db_sess.query(NewsPost).filter(NewsPost.post_tg_url == url).first()
         
         if url_exists:
-            return "Такой пост уже есть!"
+            return render_template("create_post.html", title='Create post', form=form, message="Такой пост уже есть!", user=current_user)
         
         post = NewsPost(
-            post_tg_url=url
-        )
+            post_tg_url=url)
         db_sess.add(post)
         db_sess.commit()
-        return "Post Created!"
+        return redirect(url_for("admin.manage_posts"))
     return render_template("create_post.html", title='Create post', form=form, user=current_user)
+
+
+@admin.route('/view_posts')
+@login_required
+@admin_required
+def view_posts():
+    return "All posts"
+
+
+@admin.route('/delete_post/<int:post_id>')
+@login_required
+@admin_required
+def delete_posts(post_id):
+    return str(post_id)
+
+
+@admin.route('/manage-posts')
+@login_required
+@admin_required
+def manage_posts():
+    return render_template("manage_posts.html", title='Manage posts', user=current_user)
+
+
+@admin.route('/manage-users')
+@login_required
+@admin_required
+def manage_users():
+    return "Manage users"

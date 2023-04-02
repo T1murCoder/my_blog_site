@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h3 align="center">Admin panel</h3>
+    <h3 align="center">Manage posts</h3>
+    <a class="btn btn-primary" href="/admin">Назад</a>
     <div class="row">
         <div class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar">
             <div class="position-sticky pt-3">
@@ -18,28 +19,18 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">Manage Posts</h5>
-                            <p class="card-text">Просмотр, добавление, и удаление постов.</p>
-                            <a href="/admin/manage-posts" class="btn btn-primary">Go to Posts</a>
+                            <h5 class="card-title">View posts</h5>
+                            <p class="card-text">Просмотреть все посты</p>
+                            <a href="/view_posts" class="btn btn-primary">View</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="card mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">Manage Users</h5>
-                            <p class="card-text">Просмотр, добавление, редактирование и удаление пользователей.</p>
-                            <a href="/admin/manage-users" class="btn btn-primary">Go to Users</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Test</h5>
-                            <p class="card-text">Test</p>
-                            <br>
-                            <a href="#" class="btn btn-primary">Test</a>
+                            <h5 class="card-title">Add post</h5>
+                            <p class="card-text">Добавить пост, используя ссылку</p>
+                            <a href="/admin/create-post" class="btn btn-primary">Add</a>
                         </div>
                     </div>
                 </div>
@@ -47,4 +38,8 @@
         </div>
     </div>
 </div>
+
+
+
+
 {% endblock %}
