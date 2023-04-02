@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for post in posts %}
+<div class="row">
+    <div class="post-card col-lg-5 col-sm-5 mx-auto">
+        <script async src="https://telegram.org/js/telegram-widget.js?21" data-telegram-post="{{post.post_tg_url}}" data-width="100%" data-color="B063FC"></script>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

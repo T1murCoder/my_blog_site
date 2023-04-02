@@ -61,7 +61,10 @@ def create_post():
 @login_required
 @admin_required
 def view_posts():
-    return "All posts"
+    db_sess = db_session.create_session()
+    
+    posts = db_sess.query(NewsPost).all()[::-1]
+    return render_template("view_posts.html", title='View posts', user=current_user, posts=posts)
 
 
 @admin.route('/delete-post/<int:post_id>')
