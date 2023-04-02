@@ -9,16 +9,11 @@
     margin-bottom: 10px;
 }
 
-.navbar * {
+#my_navbar * {
     color: white;
 }
 
-.nav-item:hover {
-    background-color: #b063fc;
-    color: white;
-}
-
-.nav-item {
+#my_navbar .nav-item {
     margin: 0 5px;
     padding: 5px;
     display: flex;
@@ -28,6 +23,12 @@
     border-radius: 10px;
     transition: all 0.3s;
 }
+
+#my_navbar .nav-item:hover {
+    background-color: #b063fc;
+    color: white;
+}
+
 
 .post-card {
     margin: 15px;
@@ -55,4 +56,8 @@
     margin-bottom: auto;
     color: white;
     background-color: #b063fc;
+}
+
+#admin-nav {
+    
 }

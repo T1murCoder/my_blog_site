@@ -1,8 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h3 align="center">Admin panel</h3>
-
-
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar">
+            <div class="position-sticky pt-3">
+                <nav class="nav flex-column" id="admin-nav">
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                    <a class="nav-link" href="#">Users</a>
+                    <a class="nav-link" href="#">Settings</a>
+                  </nav>
+            </div>
+        </div>
+        <div class="col-md-9 col-lg-10">
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Posts</h5>
+                            <p class="card-text">View, add, and delete posts.</p>
+                            <a href="#" class="btn btn-primary">Go to Posts</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Users</h5>
+                            <p class="card-text">View, add, edit, and delete users.</p>
+                            <a href="#" class="btn btn-primary">Go to Users</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Test</h5>
+                            <p class="card-text">Test</p>
+                            <a href="#" class="btn btn-primary">Test</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
