@@ -26,6 +26,9 @@
         <div class="collapse navbar-collapse" id="navbar">
           <div class="navbar-nav">
             {% if user.is_authenticated %}
+              {% if user.admin %}
+                <a class="nav-item nav-link" href="/admin">Admin panel</a>
+              {% endif %}
               <a class="nav-item nav-link" href="/logout">{{user.name}}</a>
             {% else %}
               <a class="nav-item nav-link" href="/login">Login</a>
