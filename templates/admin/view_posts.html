@@ -2,18 +2,23 @@
 
 {% block content %}
 <div class="row">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <div class="col col-lg-5 col-3">
         <a class="btn btn-primary" href="/admin/manage-posts">Назад</a>
     </div>
-    <div class="col col-lg-7 col-6">
+    <div class="col col-lg-7 col-7">
         <h3>Просмотр постов</h3>
     </div>
 </div>
 {% for post in posts %}
 <div class="row">
-    <div class="post-card col-lg-5 col-sm-5 mx-auto">
+    <div class="post-card col-lg-5 col-sm-5 mx-auto" id="admin-posts">
         <script async src="https://telegram.org/js/telegram-widget.js?21" data-telegram-post="{{post.post_tg_url}}" data-width="100%" data-color="B063FC"></script>
-        <a href="/admin/delete/{{post.id}}" class="btn btn-danger" style="margin-left: 55px;">Delete</a>
+        <div class="btn-wrapper">
+        <a href="/admin/delete/{{post.id}}" class="btn btn-danger">Delete</a>
+        <a href="/admin/move_up/{{post.id}}" class="btn btn-lg"><i class="bi bi-arrow-up-circle"></i></a>
+        <a href="/admin/move_down/{{post.id}}" class="btn btn-lg"><i class="bi bi-arrow-down-circle"></i></a>
+        </div>
     </div>
 </div>
 {% endfor %}

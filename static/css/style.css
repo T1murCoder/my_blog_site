@@ -58,6 +58,17 @@
     background-color: #b063fc;
 }
 
-#admin-nav {
-    
+
+
+@media screen and (max-width: 380px) {
+    #admin-posts .btn-wrapper {
+        margin-left: 10px;
+    }
+}
+
+
+@media (min-width: 381px) {
+    #admin-posts .btn-wrapper {
+        margin-left: 50px;
+    }
 }
