@@ -19,7 +19,7 @@ def admin_required(func):
 
 
 @admin.route('/')
-@login_required
+@login_required 
 @admin_required
 def admin_panel():
     return render_template('admin_panel.html', title="Admin panel", user=current_user)

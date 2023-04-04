@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "admin_nav.html" import admin_navbar %}
 
 {% block content %}
 <div class="container-fluid">
@@ -11,15 +12,7 @@
     </div>
     </div>
     <div class="row">
-        <div class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar">
-            <div class="position-sticky pt-3">
-                <nav class="nav flex-column" id="admin-nav">
-                    <a class="nav-link active" aria-current="page" href="/admin">Dashboard</a>
-                    <a class="nav-link" href="#">Users</a>
-                    <a class="nav-link" href="#">Settings</a>
-                  </nav>
-            </div>
-        </div>
+        {{ admin_navbar }}
         <div class="col-md-9 col-lg-10">
             <div class="row">
                 <div class="col-md-6 col-lg-4">
