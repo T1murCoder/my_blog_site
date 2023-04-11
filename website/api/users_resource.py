@@ -1,6 +1,8 @@
 from flask import jsonify
 from flask_restful import reqparse, abort, Api, Resource
 from data import db_session
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from ..admin import admin_required
 from data.users import User
 
 
@@ -18,13 +20,24 @@ def abort_if_user_not_found(user_id):
         abort(404, message=f"User {user_id} not found")
 
 
+def check_args():
+    pass
+
+def check_token():
+    pass
+
+
 class UsersResource(Resource):
+    @login_required
+    @admin_required
     def get(self, user_id):
         abort_if_user_not_found(user_id)
         db_sess = db_session.create_session()
         users = db_sess.query(User).get(user_id)
         return jsonify({'users': users.to_dict(only=('id', 'name', 'email', 'admin', 'hashed_password', 'created_date'))})
     
+    @login_required
+    @admin_required
     def delete(self, user_id):
         abort_if_user_not_found(user_id)
         db_sess = db_session.create_session()
@@ -35,11 +48,15 @@ class UsersResource(Resource):
 
 
 class UsersListResource(Resource):
+    @login_required
+    @admin_required
     def get(self):
         db_sess = db_session.create_session()
         users = db_sess.query(User).all()
         return jsonify({'users': [item.to_dict(only=('id', 'name', 'email', 'admin', 'hashed_password', 'created_date')) for item in users]})
     
+    @login_required
+    @admin_required
     def post(self):
         args = parser.parse_args()
         db_sess = db_session.create_session()

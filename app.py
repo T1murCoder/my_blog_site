@@ -2,6 +2,8 @@ from flask import Flask
 from data import db_session
 from os import path
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_restful import reqparse, abort, Api, Resource
+from website.api import users_resource
 from data.users import User
 
 
@@ -11,6 +13,9 @@ def create_app():
     login_manager = LoginManager()
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
+    api = Api(app)
+    api.add_resource(users_resource.UsersListResource, '/api/v1/users')
+    api.add_resource(users_resource.UsersResource, '/api/v1/users/<int:user_id>')
 
     from website.views import views
     from website.auth import auth

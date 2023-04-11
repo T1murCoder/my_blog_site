@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from requests import get
 from data import db_session
 from data.news_posts import NewsPost
 
@@ -10,9 +11,9 @@ views = Blueprint("views", __name__, template_folder="../templates")
 @views.route("/home")
 def home():
     db_sess = db_session.create_session()
-    
+
     posts = db_sess.query(NewsPost).all()[::-1]
-    
+
     return render_template("home.html", title='Home', posts=posts, user=current_user)
 
 
