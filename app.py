@@ -16,6 +16,8 @@ def create_app():
     api = Api(app)
     api.add_resource(users_resource.UsersListResource, '/api/v1/users')
     api.add_resource(users_resource.UsersResource, '/api/v1/users/<int:user_id>')
+    api.add_resource(users_resource.UsersTokenListResource, '/api/v1/users/<params>')
+    api.add_resource(users_resource.UsersTokenResource, '/api/v1/users/<int:user_id>/<params>')
 
     from website.views import views
     from website.auth import auth

@@ -13,7 +13,7 @@ def home():
     db_sess = db_session.create_session()
 
     posts = db_sess.query(NewsPost).all()[::-1]
-
+    print(get("http://127.0.0.1:8080/api/v1/users/test").json())
     return render_template("home.html", title='Home', posts=posts, user=current_user)
 
 

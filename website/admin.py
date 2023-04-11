@@ -11,7 +11,7 @@ admin = Blueprint("admin", __name__, template_folder="../templates/admin", stati
 def admin_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        if current_user.admin:
+        if not current_user.is_anonymous and current_user.admin:
             return func(*args, **kwargs)
         else:
             abort(404)
@@ -19,14 +19,12 @@ def admin_required(func):
 
 
 @admin.route('/')
-@login_required 
 @admin_required
 def admin_panel():
     return render_template('admin_panel.html', title="Admin panel", user=current_user)
 
 
 @admin.route("/create-post", methods=['GET', 'POST'])
-@login_required
 @admin_required
 def create_post():
     form = CreatePostForm()
@@ -58,7 +56,6 @@ def create_post():
 
 
 @admin.route('/view-posts')
-@login_required
 @admin_required
 def view_posts():
     db_sess = db_session.create_session()
@@ -68,21 +65,18 @@ def view_posts():
 
 
 @admin.route('/delete-post/<int:post_id>')
-@login_required
 @admin_required
 def delete_posts(post_id):
     return str(post_id)
 
 
 @admin.route('/manage-posts')
-@login_required
 @admin_required
 def manage_posts():
     return render_template("manage_posts.html", title='Manage posts', user=current_user)
 
 
 @admin.route('/manage-users')
-@login_required
 @admin_required
 def manage_users():
     return "Manage users"
