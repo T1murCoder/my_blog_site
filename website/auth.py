@@ -20,8 +20,8 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for('views.home'))
-        return render_template("login.html", form=form, message="Неправильный логин или пароль", user=current_user)
-    return render_template("login.html", form=form, user=current_user)
+        return render_template("login.html", title='Login', form=form, message="Неправильный логин или пароль", user=current_user)
+    return render_template("login.html", title='Login', form=form, user=current_user)
 
 
 @auth.route("/sign-up", methods=['GET', 'POST'])
@@ -31,13 +31,13 @@ def sign_up():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('signup.html', title='Регистрация',
+            return render_template('signup.html', title='Sign up',
                                    form=form,
                                    message="Пароли не совпадают",
                                    user=current_user)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template('signup.html', title='Регистрация',
+            return render_template('signup.html', title='Sign up',
                                    form=form,
                                    message="Такой пользователь уже есть", user=current_user)
         user = User(
