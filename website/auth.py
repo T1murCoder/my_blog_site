@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, abort
+from flask import Blueprint, render_template, redirect, url_for, abort, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from .forms.LoginForm import LoginForm
 from .forms.RegisterForm import RegisterForm
@@ -19,6 +19,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
+            flash("Logged in!", category="success")
             return redirect(url_for('views.home'))
         return render_template("login.html", title='Login', form=form, message="Неправильный логин или пароль", user=current_user)
     return render_template("login.html", title='Login', form=form, user=current_user)
