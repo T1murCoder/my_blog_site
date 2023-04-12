@@ -14,10 +14,9 @@ def create_app():
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
     api = Api(app)
-    api.add_resource(users_resource.UsersListResource, '/api/v1/users')
-    api.add_resource(users_resource.UsersResource, '/api/v1/users/<int:user_id>')
-    api.add_resource(users_resource.UsersTokenListResource, '/api/v1/users/<params>')
-    api.add_resource(users_resource.UsersTokenResource, '/api/v1/users/<int:user_id>/<params>')
+
+    api.add_resource(users_resource.UsersListResource, '/api/v2/users', '/api/v2/users/<params>')
+    api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>', '/api/v2/users/<int:user_id>/<params>')
 
     from website.views import views
     from website.auth import auth

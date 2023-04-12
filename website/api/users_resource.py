@@ -4,7 +4,7 @@ from data import db_session
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from ..admin import admin_required
 from data.users import User
-from .api_misc import token_required
+from .api_misc import token_required, admin_or_token_required
 
 
 parser = reqparse.RequestParser()
@@ -22,15 +22,15 @@ def abort_if_user_not_found(user_id):
 
 
 class UsersResource(Resource):
-    @admin_required
-    def get(self, user_id):
+    @admin_or_token_required
+    def get(self, user_id, **kwargs):
         abort_if_user_not_found(user_id)
         db_sess = db_session.create_session()
         users = db_sess.query(User).get(user_id)
         return jsonify({'users': users.to_dict(only=('id', 'name', 'email', 'admin', 'hashed_password', 'created_date'))})
     
-    @admin_required
-    def delete(self, user_id):
+    @admin_or_token_required
+    def delete(self, user_id, **kwargs):
         abort_if_user_not_found(user_id)
         db_sess = db_session.create_session()
         users = db_sess.query(User).get(user_id)
@@ -40,54 +40,14 @@ class UsersResource(Resource):
 
 
 class UsersListResource(Resource):
-    @admin_required
-    def get(self):
+    @admin_or_token_required
+    def get(self, **kwargs):
         db_sess = db_session.create_session()
         users = db_sess.query(User).all()
         return jsonify({'users': [item.to_dict(only=('id', 'name', 'email', 'admin', 'hashed_password', 'created_date')) for item in users]})
     
-    @admin_required
-    def post(self):
-        args = parser.parse_args()
-        db_sess = db_session.create_session()
-        user = User(
-            name=args['name'],
-            email=args['email'],
-            admin=args['admin']
-        )
-        user.set_password(args['password'])
-        db_sess.add(user)
-        db_sess.commit()
-        return jsonify({'success': 'OK'})
-
-
-class UsersTokenResource(Resource):
-    @token_required
-    def get(self, user_id, params):
-        abort_if_user_not_found(user_id)
-        db_sess = db_session.create_session()
-        users = db_sess.query(User).get(user_id)
-        return jsonify({'users': users.to_dict(only=('id', 'name', 'email', 'admin', 'hashed_password', 'created_date'))})
-    
-    @token_required
-    def delete(self, user_id, params):
-        abort_if_user_not_found(user_id)
-        db_sess = db_session.create_session()
-        users = db_sess.query(User).get(user_id)
-        db_sess.delete(users)
-        db_sess.commit()
-        return jsonify({'success': 'OK'})
-
-
-class UsersTokenListResource(Resource):
-    @token_required
-    def get(self, params):
-        db_sess = db_session.create_session()
-        users = db_sess.query(User).all()
-        return jsonify({'users': [item.to_dict(only=('id', 'name', 'email', 'admin', 'hashed_password', 'created_date')) for item in users]})
-    
-    @token_required
-    def post(self, params):
+    @admin_or_token_required
+    def post(self, **kwargs):
         args = parser.parse_args()
         db_sess = db_session.create_session()
         user = User(

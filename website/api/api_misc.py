@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, abort, redirect, url_for, jsonify
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from functools import wraps
 
 
@@ -15,6 +16,7 @@ def token_required(func):
 
 def check_args(args):
     try:
+        # TODO: Можно переделать в словарь через map
         args = args.split('&')
         
         for arg in args:
@@ -31,3 +33,17 @@ def check_token(token):
     if token == 'test':
         return True
     return False
+
+
+def admin_or_token_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        print(kwargs)
+        if not current_user.is_anonymous:
+            if current_user.admin:
+                return func(*args, **kwargs)
+        params = kwargs.get('params')
+        if check_args(params):
+            return func(*args, **kwargs)
+        abort(404)
+    return decorated_view
