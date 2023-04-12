@@ -10,6 +10,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('url', required=True)
 
 
+# Если пост не существует
 def abort_if_post_not_found(post_id):
     session = db_session.create_session()
     post = session.query(NewsPost).get(post_id)

@@ -8,6 +8,7 @@ from data import db_session
 admin = Blueprint("admin", __name__, template_folder="../templates/admin", static_folder="../static")
 
 
+# Для доступа по админке
 def admin_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
@@ -18,12 +19,14 @@ def admin_required(func):
     return decorated_view
 
 
+# Админская панель
 @admin.route('/')
 @admin_required
 def admin_panel():
     return render_template('admin_panel.html', title="Admin panel", user=current_user)
 
 
+# Создание поста
 @admin.route("/create-post", methods=['GET', 'POST'])
 @admin_required
 def create_post():
@@ -59,6 +62,7 @@ def create_post():
     return render_template("create_post.html", title='Create post', form=form, user=current_user)
 
 
+# Просмотр постов от лица админа
 @admin.route('/view-posts')
 @admin_required
 def view_posts():
@@ -68,18 +72,21 @@ def view_posts():
     return render_template("view_posts.html", title='View posts', user=current_user, posts=posts)
 
 
+# Удаление поста по id
 @admin.route('/delete-post/<int:post_id>')
 @admin_required
 def delete_posts(post_id):
     return str(post_id)
 
 
+# Управление постами
 @admin.route('/manage-posts')
 @admin_required
 def manage_posts():
     return render_template("manage_posts.html", title='Manage posts', user=current_user)
 
 
+# Управление пользователями
 @admin.route('/manage-users')
 @admin_required
 def manage_users():

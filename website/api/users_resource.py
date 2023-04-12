@@ -13,6 +13,7 @@ parser.add_argument('admin', type=bool, default=False)
 parser.add_argument('password', required=True)
 
 
+# Если пользователь не существует
 def abort_if_user_not_found(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)

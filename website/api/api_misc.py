@@ -3,10 +3,10 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from functools import wraps
 
 
+# Для доступа по токену
 def token_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        print(kwargs)
         params = kwargs.get('params')
         if not check_args(params):
             abort(404)
@@ -14,6 +14,7 @@ def token_required(func):
     return decorated_view
 
 
+# Проверка аргументов
 def check_args(args):
     try:
         # TODO: Можно переделать в словарь через map
@@ -26,15 +27,18 @@ def check_args(args):
         return check
     except:
         return abort(404)
-            
 
+
+       
+# Проверка токена в базе данных
 def check_token(token):
-    # Тут проверять токен в бд
+    # TODO: Тут проверять токен в бд
     if token == 'test':
         return True
     return False
 
 
+# Для доступа по токену или админке
 def admin_or_token_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
