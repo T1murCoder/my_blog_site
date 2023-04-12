@@ -2,9 +2,8 @@ from flask import jsonify
 from flask_restful import reqparse, abort, Api, Resource
 from data import db_session
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from ..admin import admin_required
 from data.users import User
-from .api_misc import token_required, admin_or_token_required
+from .api_misc import admin_or_token_required
 
 
 parser = reqparse.RequestParser()

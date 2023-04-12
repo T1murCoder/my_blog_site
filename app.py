@@ -3,7 +3,7 @@ from data import db_session
 from os import path
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import reqparse, abort, Api, Resource
-from website.api import users_resource
+from website.api import users_resource, news_posts_resource
 from data.users import User
 
 
@@ -17,6 +17,8 @@ def create_app():
 
     api.add_resource(users_resource.UsersListResource, '/api/v2/users', '/api/v2/users/<params>')
     api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>', '/api/v2/users/<int:user_id>/<params>')
+    api.add_resource(news_posts_resource.NewsPostsListResource, '/api/v2/news_posts', '/api/v2/news_posts/<params>')
+    api.add_resource(news_posts_resource.NewsPostsResource, '/api/v2/news_posts/<int:post_id>', '/api/v2/news_posts/<int:post_id>/<params>')
 
     from website.views import views
     from website.auth import auth

@@ -58,6 +58,11 @@
     background-color: #b063fc;
 }
 
+.toast-header {
+    background-color: #CC99FF;
+    color: white;
+}
+
 
 
 @media screen and (max-width: 380px) {
