@@ -34,10 +34,6 @@ def create_app():
     return app
 
 
-
-
-
-
 if __name__ == "__main__":
     db_session.global_init("db/users.db")
     app = create_app()
