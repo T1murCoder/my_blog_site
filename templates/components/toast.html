@@ -1,0 +1,23 @@
+{% macro toast(name="System", message="", category="") %}
+<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+    {% set color = "#007aff" %}
+    {% if category == "success" %}
+        {% set color = "#198754" %}
+    {% elif category == "danger" %}
+        {% set color = "#dc3545" %}
+    {% elif category == "warning" %}
+        {% set color = '#ffc107' %}
+    {% endif %}
+    <svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <rect width="100%" height="100%" fill={{color}}></rect>
+    </svg>
+      <strong class="me-auto">{{name}}</strong>
+      <small class="text-muted">just now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      {{message}}
+    </div>
+  </div>
+{% endmacro %}

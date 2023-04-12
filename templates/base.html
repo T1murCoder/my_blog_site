@@ -1,3 +1,5 @@
+{% from "components/toast.html" import toast %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -40,25 +42,13 @@
     </nav>
     {% with messages = get_flashed_messages(with_categories=True) %}
       {% if messages %}
+      <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-absolute top-0 end-0 p-3">
         {% for category, message in messages %}
-        {% if category == "error" %}
-        <div class="alert alert-danger alter-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% elif category == "success" %}
-        <div class="alert alert-success alter-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% elif category == "warning" %}
-        <div class="alert alert-warning alter-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% endif %}
-
+          {{ toast(message=message, category=category) }}
         {% endfor %}
+      </div>
+    </div>
       {% endif %}
     {% endwith %}
     <div class="container">{% block content %}{% endblock %}</div>

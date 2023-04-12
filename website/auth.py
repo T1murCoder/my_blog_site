@@ -21,7 +21,7 @@ def login():
             login_user(user, remember=form.remember_me.data)
             flash("Logged in!", category="success")
             return redirect(url_for('views.home'))
-        return render_template("login.html", title='Login', form=form, message="Неправильный логин или пароль", user=current_user)
+        flash("Неправильный логин или пароль.", category="danger")
     return render_template("login.html", title='Login', form=form, user=current_user)
 
 
@@ -32,15 +32,12 @@ def sign_up():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('signup.html', title='Sign up',
-                                   form=form,
-                                   message="Пароли не совпадают",
-                                   user=current_user)
+            flash("Пароли не совпадают!", "warning")
+            return render_template("signup.html", title='Sign up', form=form, user=current_user)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template('signup.html', title='Sign up',
-                                   form=form,
-                                   message="Такой пользователь уже есть", user=current_user)
+            flash("Такой пользователь уже есть!", "warning")
+            return render_template("signup.html", title='Sign up', form=form, user=current_user)
         user = User(
             name=form.name.data,
             email=form.email.data
@@ -48,6 +45,7 @@ def sign_up():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
+        flash("Вы зарегистрированы!", "success")
         return redirect(url_for('auth.login'))
     return render_template("signup.html", title='Sign up', form=form, user=current_user)
 
@@ -56,4 +54,5 @@ def sign_up():
 @login_required
 def logout():
     logout_user()
+    flash("Вы вышли из аккаунта")
     return redirect("/")

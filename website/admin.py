@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, redirect, url_for
+from flask import Blueprint, render_template, abort, redirect, url_for, flash
 from functools import wraps
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from .forms.admin.CreatePostForm import CreatePostForm
@@ -36,21 +36,25 @@ def create_post():
         try:
             domain = url.split('/')[2]
         except IndexError:
-            return render_template("create_post.html", title='Create post', form=form, message="Это не ссылка!", user=current_user)
+            flash("Это не ссылка!", "danger")
+            return render_template("create_post.html", title='Create post', form=form, user=current_user)
         
         if not (domain == "t.me" or domain == "telegram.me"):
-            return render_template("create_post.html", title='Create post', form=form, message="Вы указали неправильную ссылку!", user=current_user)
+            flash("Вы указали неправильную ссылку!", "danger")
+            return render_template("create_post.html", title='Create post', form=form, user=current_user)
         
         url = url.split('/', 3)[-1]
         url_exists = db_sess.query(NewsPost).filter(NewsPost.post_tg_url == url).first()
         
         if url_exists:
-            return render_template("create_post.html", title='Create post', form=form, message="Такой пост уже есть!", user=current_user)
+            flash("Такой пост уже есть!", "warning")
+            return render_template("create_post.html", title='Create post', form=form, user=current_user)
         
         post = NewsPost(
             post_tg_url=url)
         db_sess.add(post)
         db_sess.commit()
+        flash("Пост опубликован!", "success")
         return redirect(url_for("admin.manage_posts"))
     return render_template("create_post.html", title='Create post', form=form, user=current_user)
 
