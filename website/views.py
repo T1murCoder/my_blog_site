@@ -62,7 +62,7 @@ def delete_comment(comment_id):
     if not comment:
         flash("Такого комментария не существует", "error")
         abort(404)
-    if current_user.id != comment.author_id:
+    if current_user.id != comment.author_id and not current_user.admin:
         abort(404)
     post_id = comment.post_id
     db_sess.delete(comment)
