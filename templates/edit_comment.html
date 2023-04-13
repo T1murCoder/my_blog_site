@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container row">
+    <div class="col-lg-5 col-sm-7 mx-auto">
+      <form method="POST" action="">
+        <h3 align="center">Редактирование комментария</h3>
+        {{ form.hidden_tag() }}
+        <p>
+            {{form.text.label}}<br>
+            {{form.text(class="form-control col-lg-5 col-sm-6", maxlength=200)}}
+            <div class="row justify-content-end">
+            {{ form.submit(type="submit", class="btn btn-primary justify-content-end d-block col-lg-3 col-sm-2 col-xs-3", style="margin-right: 10px") }}
+            </div>
+            <br>
+            {% for error in form.text.errors %} 
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+                {% endfor %}
+            
+        </p>
+    </form>
+  </div>
+
+
+{% endblock %}

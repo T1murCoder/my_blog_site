@@ -27,7 +27,7 @@ def like_post(post_id):
 
 @views.route("/posts/<int:post_id>", methods=['GET', 'POST'])
 @login_required
-def view_post_with_comments(post_id):
+def view_post(post_id):
     form = CommentForm()
     db_sess = db_session.create_session()
     post = db_sess.query(NewsPost).get(post_id)
@@ -57,9 +57,34 @@ def view_post_with_comments(post_id):
 @views.route("/delete-comment/<int:comment_id>")
 @login_required
 def delete_comment(comment_id):
-    return str(comment_id)
+    db_sess = db_session.create_session()
+    comment = db_sess.query(Comment).get(comment_id)
+    if not comment:
+        flash("Такого комментария не существует", "error")
+        abort(404)
+    if current_user.id != comment.author_id:
+        abort(404)
+    post_id = comment.post_id
+    db_sess.delete(comment)
+    db_sess.commit()
+    return redirect(url_for('views.view_post', post_id=post_id))
 
-@views.route("/edit-comment/<int:comment_id>")
+@views.route("/edit-comment/<int:comment_id>", methods=['GET', 'POST'])
 @login_required
 def edit_comment(comment_id):
-    return str(comment_id)
+    form = CommentForm()
+    db_sess = db_session.create_session()
+    comment = db_sess.query(Comment).get(comment_id)
+    if not comment:
+        flash("Такого комментария не существует", "error")
+        abort(404)
+    if current_user.id != comment.author_id:
+        abort(404)
+    
+    if form.validate_on_submit():
+        comment.text = form.text.data
+        db_sess.commit()
+        return redirect(url_for('views.view_post', post_id=comment.post_id))
+    form.text.data = comment.text
+    
+    return render_template("edit_comment.html", title='Edit comment', form=form, user=current_user)
