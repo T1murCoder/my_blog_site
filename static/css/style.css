@@ -66,14 +66,18 @@
 
 
 @media screen and (max-width: 380px) {
-    #admin-posts .btn-wrapper {
+    .btn-wrapper {
         margin-left: 10px;
     }
 }
 
 
 @media (min-width: 381px) {
-    #admin-posts .btn-wrapper {
+    .btn-wrapper {
         margin-left: 50px;
     }
+}
+
+.btn-wrapper a {
+    margin-right: 10px;
 }

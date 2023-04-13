@@ -24,8 +24,8 @@ def create_app():
     from website.auth import auth
     from website.admin import admin
 
-    app.register_blueprint(views, url_prefix="/")
-    app.register_blueprint(auth, url_prefix="/")
+    app.register_blueprint(views, url_prefix="")
+    app.register_blueprint(auth, url_prefix="")
     app.register_blueprint(admin, url_prefix="/admin")
     
     @login_manager.user_loader

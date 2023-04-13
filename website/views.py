@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, flash, abort, redirect, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import get
 from data import db_session
 from data.news_posts import NewsPost
+from data.comments import Comment
+from .forms.CreateComment import CommentForm
 
-views = Blueprint("views", __name__, template_folder="../templates")
+views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
 
 @views.route("/")
@@ -21,3 +23,32 @@ def home():
 @login_required
 def like_post(post_id):
     return str(post_id)
+
+
+@views.route("/posts/<int:post_id>", methods=['GET', 'POST'])
+@login_required
+def view_post_with_comments(post_id):
+    form = CommentForm()
+    db_sess = db_session.create_session()
+    post = db_sess.query(NewsPost).get(post_id)
+    if not post:
+        flash("Такого поста не существует!", "error")
+        abort(404)
+    if form.validate_on_submit():
+        if not form.text.data:
+            flash("Вы не указали текст комментария!", "Warning")
+            return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
+        if len(form.text.data) > 200:
+            flash("Комментарий слишком длинный!", "Warning")
+            return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
+        comment = Comment(
+            text=form.text.data,
+            author_id=current_user.id,
+            post_id=post_id
+        )
+        db_sess.add(comment)
+        db_sess.commit()
+        flash("Комментарий опубликован!", "success")
+        return redirect(f"/posts/{post_id}")
+        
+    return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
