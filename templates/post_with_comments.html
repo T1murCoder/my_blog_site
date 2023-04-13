@@ -38,7 +38,8 @@
                 <div class="card-body">
                     <p class="card-text">{{comment.text}}</p>
                     <p class="card-text"><small class="text-muted">{{comment.created_date}}</small></p>
-                    <a href="{{url_for('views.edit_comment', comment_id=comment.id)}}"><i class="bi bi-pencil"></i></a>
+                    <a class="btn btn-sm btn-outline-primary btn-comment-down" href="{{url_for('views.edit_comment', comment_id=comment.id)}}"><i class="bi bi-pencil"></i></a>
+                    <a class="btn btn-sm btn-outline-danger btn-comment-down" href="{{url_for('views.delete_comment', comment_id=comment.id)}}"><i class="bi bi-trash"></i></a>
                 </div>
             </div>
         {% endfor %}
