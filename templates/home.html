@@ -9,8 +9,8 @@
             <div class="post-card col-lg-5 col-sm-5 mx-auto">
                 <script async src="https://telegram.org/js/telegram-widget.js?21" data-telegram-post="{{post.post_tg_url}}" data-width="100%" data-color="B063FC"></script>
                 <div class="btn-wrapper">
-                    <a href="/like/{{post.id}}" class="btn btn-success"><i class="bi bi-hand-thumbs-up"></i> Count</a>
-                    <a href="/posts/{{post.id}}" class="btn btn-primary"><i class="bi bi-chat-right-text"></i> Count</a>
+                    <a href="{{url_for('views.like_post', post_id=post.id)}}" class="btn btn-success"><i class="bi bi-hand-thumbs-up"></i> Count</a>
+                    <a href="{{url_for('views.view_post_with_comments', post_id=post.id)}}" class="btn btn-primary"><i class="bi bi-chat-right-text"></i> Count</a>
                 </div>
             </div>
         </div>

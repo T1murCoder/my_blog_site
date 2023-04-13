@@ -52,3 +52,14 @@ def view_post_with_comments(post_id):
         return redirect(f"/posts/{post_id}")
         
     return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
+
+
+@views.route("/delete-comment/<int:comment_id>")
+@login_required
+def delete_comment(comment_id):
+    return str(comment_id)
+
+@views.route("/edit-comment/<int:comment_id>")
+@login_required
+def edit_comment(comment_id):
+    return str(comment_id)

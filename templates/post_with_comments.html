@@ -19,7 +19,7 @@
                 {{form.text.label}}<br>
                 {{form.text(class="form-control col-lg-5 col-sm-6", maxlength=200)}}
                 <div class="row justify-content-end">
-                {{ form.submit(type="submit", class="btn btn-primary justify-content-end d-block col-lg-2 col-sm-3") }}
+                {{ form.submit(type="submit", class="btn btn-primary justify-content-end d-block col-lg-2 col-sm-3", style="margin-right: 10px") }}
                 </div>
                 <br>
                 {% for error in form.text.errors %} 
@@ -34,12 +34,11 @@
         
         {% for comment in post.comments %}
             <div class="card" style="margin-bottom: 20px;">
-                <div class="card-header">
-                    {{comment.author.name}}
-                </div>
+                <h6 class="card-header">{{comment.author.name}}</h5>
                 <div class="card-body">
                     <p class="card-text">{{comment.text}}</p>
                     <p class="card-text"><small class="text-muted">{{comment.created_date}}</small></p>
+                    <a href="{{url_for('views.edit_comment', comment_id=comment.id)}}"><i class="bi bi-pencil"></i></a>
                 </div>
             </div>
         {% endfor %}

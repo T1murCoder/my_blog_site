@@ -29,12 +29,12 @@
           <div class="navbar-nav">
             {% if user.is_authenticated %}
               {% if user.admin %}
-                <a class="nav-item nav-link" href="/admin">Admin panel</a>
+                <a class="nav-item nav-link" href="{{url_for('admin.admin_panel')}}">Admin panel</a>
               {% endif %}
-              <a class="nav-item nav-link" href="/logout">{{user.name}}</a>
+              <a class="nav-item nav-link" href="{{url_for('auth.logout')}}">{{user.name}}</a>
             {% else %}
-              <a class="nav-item nav-link" href="/login">Login</a>
-              <a class="nav-item nav-link" href="/sign-up">Sign Up</a>
+              <a class="nav-item nav-link" href="{{url_for('auth.login')}}">Login</a>
+              <a class="nav-item nav-link" href="{{url_for('auth.sign_up')}}">Sign Up</a>
             {% endif %}
           </div>
         </div>

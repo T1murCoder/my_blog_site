@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col col-lg-5 col-3">
-        <a class="btn btn-primary" href="/admin">Назад</a>
+        <a class="btn btn-primary" href="{{url_for('admin.admin_panel')}}">Назад</a>
     </div>
     <div class="col col-lg-6 col-6">
         <h3>Manage posts</h3>
@@ -20,7 +20,7 @@
                         <div class="card-body">
                             <h5 class="card-title">View posts</h5>
                             <p class="card-text">Просмотреть все посты</p>
-                            <a href="/admin/view-posts" class="btn btn-primary">View</a>
+                            <a href="{{url_for('admin.view_posts')}}" class="btn btn-primary">View</a>
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Add post</h5>
                             <p class="card-text">Добавить пост, используя ссылку</p>
-                            <a href="/admin/create-post" class="btn btn-primary">Add</a>
+                            <a href="{{url_for('admin.create_post')}}" class="btn btn-primary">Add</a>
                         </div>
                     </div>
                 </div>

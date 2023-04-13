@@ -75,7 +75,7 @@ def view_posts():
 # Удаление поста по id
 @admin.route('/delete-post/<int:post_id>')
 @admin_required
-def delete_posts(post_id):
+def delete_post(post_id):
     return str(post_id)
 
 
@@ -91,3 +91,17 @@ def manage_posts():
 @admin_required
 def manage_users():
     return "Manage users"
+
+
+@admin.route('/move_up/<int:post_id>')
+@admin_required
+def move_post_up(post_id):
+    return str(post_id)
+
+
+@admin.route('/move_down/<int:post_id>')
+@admin_required
+def move_post_down(post_id):
+    return str(post_id)
+
+
