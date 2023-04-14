@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, flash, abort, redirect, url_for
+from flask import Blueprint, render_template, flash, abort, redirect, url_for, request, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import get
 from data import db_session
 from data.news_posts import NewsPost
 from data.comments import Comment
+from data.likes import Like
 from .forms.CreateComment import CommentForm
 
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
@@ -19,10 +20,27 @@ def home():
     return render_template("home.html", title='Home', posts=posts, user=current_user)
 
 
-@views.route("/like/<int:post_id>")
+@views.route("/like/<int:post_id>", methods=['POST'])
 @login_required
 def like_post(post_id):
-    return str(post_id)
+    db_sess = db_session.create_session()
+    post = db_sess.query(NewsPost).get(post_id)
+    if not post:
+        flash('Такого поста ну существует!', 'error')
+        return jsonify({'error': 'Post does not exist.'}, 400)
+    like = db_sess.query(Like).filter(Like.author_id == current_user.id, Like.post_id == post_id).first()
+    if like:
+        db_sess.delete(like)
+        db_sess.commit()
+    else:
+        like = Like(
+            author_id=current_user.id,
+            post_id=post_id
+        )
+        db_sess.add(like)
+        db_sess.commit()
+    # back = request.referrer
+    return jsonify({"likes": len(post.likes), "liked": current_user.id in map(lambda x: x.author_id, post.likes)})
 
 
 @views.route("/posts/<int:post_id>", methods=['GET', 'POST'])

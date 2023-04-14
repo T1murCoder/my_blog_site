@@ -11,6 +11,7 @@ class NewsPost(SqlAlchemyBase, SerializerMixin):
                            primary_key=True, autoincrement=True)
     post_tg_url = sqlalchemy.Column(sqlalchemy.String, unique=True)
     comments = orm.relationship("Comment", back_populates='post')
+    likes = orm.relationship("Like", back_populates='post')
 
     def __repr__(self):
         return '<NewsPost %r>' % self.post_tg_url
