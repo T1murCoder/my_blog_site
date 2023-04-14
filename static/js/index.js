@@ -14,5 +14,5 @@ function like(post_id) {
                 }
                 
             })
-    .catch((e) => alert("Could not like this post"));
+    .catch((e) => alert("Для того чтобы оценивать записи вам нужно войти в аккаунт"));
 }

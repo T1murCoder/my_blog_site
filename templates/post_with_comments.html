@@ -37,7 +37,7 @@
         </form>
     <h5>Комментариев: {{post.comments|length}}</h3>
     {% if post.comments %}
-        
+        <div class="comments">
         {% for comment in post.comments %}
             <div class="card" style="margin-bottom: 20px;">
                 <h6 class="card-header">{{comment.author.name}}</h5>
@@ -53,7 +53,7 @@
                 </div>
             </div>
         {% endfor %}
-        
+        </div>
     {% endif %}
     </div>
 </div>

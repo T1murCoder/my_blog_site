@@ -19,7 +19,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            flash("Logged in!", category="success")
+            flash("Вы вошли в аккаунт!", category="success")
             return redirect(url_for('views.home'))
         flash("Неправильный логин или пароль.", category="danger")
     return render_template("login.html", title='Login', form=form, user=current_user)
