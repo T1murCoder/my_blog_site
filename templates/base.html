@@ -14,27 +14,26 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="z-index: 11;">
-      <div id="site_logo">
-        <a href="/home"><img src="{{url_for('static', filename='img/logo_timur.png')}}" style="width: 150px; height: 27px;"alt=""></a>
-      </div>
-      <div id="wrapper">
-        <button
+      <div class="container-fluid">
+        <a class="navbar-brand" id="site_logo" href="/home"><img src="{{url_for('static', filename='img/logo_timur.png')}}" style="width: 150px; height: 27px;"alt=""></a>
+
+        <button 
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#my_navbar">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="my_navbar">
-          <div class="navbar-nav">
+        <div class="collapse navbar-collapse flex-grow-1" id="my_navbar">
+          <div class="navbar-nav ms-auto flex-nowrap text-end">
             {% if user.is_authenticated %}
               {% if user.admin %}
-                <a class="nav-item nav-link" href="{{url_for('admin.admin_panel')}}">Admin panel</a>
+                <a class="nav-item nav-link menu-item" href="{{url_for('admin.admin_panel')}}">Admin panel</a>
               {% endif %}
-              <a class="nav-item nav-link" href="{{url_for('auth.logout')}}">{{user.name}}</a>
+              <a class="nav-item nav-link menu-item" href="{{url_for('auth.logout')}}">{{user.name}}</a>
             {% else %}
-              <a class="nav-item nav-link" href="{{url_for('auth.login')}}">Login</a>
-              <a class="nav-item nav-link" href="{{url_for('auth.sign_up')}}">Sign Up</a>
+              <a class="nav-item nav-link menu-item" href="{{url_for('auth.login')}}">Login</a>
+              <a class="nav-item nav-link menu-item" href="{{url_for('auth.sign_up')}}">Sign Up</a>
             {% endif %}
           </div>
         </div>

@@ -15,7 +15,8 @@
 
 #my_navbar .nav-item {
     margin: 0 5px;
-    padding: 5px;
+    padding: 8px 8px;
+
     display: flex;
     justify-content: center;
     align-content: center;
@@ -23,12 +24,6 @@
     border-radius: 10px;
     transition: all 0.3s;
 }
-
-#my_navbar .nav-item:hover {
-    background-color: #b063fc;
-    color: white;
-}
-
 
 .post-card {
     margin: 15px;
@@ -49,14 +44,23 @@
     transition: all 0.3s;
 }
 
-#site_logo:hover {
-    margin-right: auto;
-    margin-left: 10px;
-    margin-top: auto;
-    margin-bottom: auto;
-    color: white;
-    background-color: #b063fc;
-}
+@media (pointer: fine) {
+    #my_navbar .nav-item:hover {
+        background-color: #b063fc;
+        color: white;
+    }
+
+    #site_logo:hover {
+        margin-right: auto;
+        margin-left: 10px;
+        margin-top: auto;
+        margin-bottom: auto;
+
+        color: white;
+        background-color: #b063fc;
+    }
+  }
+
 
 .toast-header {
     background-color: #CC99FF;

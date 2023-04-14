@@ -28,6 +28,7 @@ def like_post(post_id):
 @views.route("/posts/<int:post_id>", methods=['GET', 'POST'])
 @login_required
 def view_post(post_id):
+    # TODO: Сделать отображение времени по другому
     form = CommentForm()
     db_sess = db_session.create_session()
     post = db_sess.query(NewsPost).get(post_id)
