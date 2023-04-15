@@ -9,8 +9,12 @@
     margin-bottom: 10px;
 }
 
-#my_navbar * {
+#my_navbar .nav-item {
     color: white;
+}
+
+#my_navbar .dropdown * {
+    z-index: 100000;
 }
 
 #my_navbar .nav-item {
@@ -23,6 +27,11 @@
     flex-direction: column;
     border-radius: 10px;
     transition: all 0.3s;
+}
+
+
+#my_navbar .dropdown-menu {
+    border-color: #b063fc;
 }
 
 .post-card {
@@ -38,7 +47,7 @@
 }
 
 #site_logo {
-    margin-left: 20px;
+    margin-left: 10px;
     padding: 5px;
     border-radius: 10px;
     transition: all 0.3s;
@@ -52,7 +61,7 @@
 
     #site_logo:hover {
         margin-right: auto;
-        margin-left: 10px;
+        margin-left: 0px;
         margin-top: auto;
         margin-bottom: auto;
 

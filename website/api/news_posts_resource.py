@@ -50,7 +50,7 @@ class NewsPostsListResource(Resource):
     def get(self, **kwargs):
         db_sess = db_session.create_session()
         posts = db_sess.query(NewsPost).all()
-        return jsonify({'users': [item.to_dict(only=('id', 'post_tg_url')) for item in posts]})
+        return jsonify({'posts': [item.to_dict(only=('id', 'post_tg_url')) for item in posts]})
     
     @admin_or_token_required
     def post(self, **kwargs):

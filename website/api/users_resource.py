@@ -32,6 +32,7 @@ class UsersResource(Resource):
     @admin_or_token_required
     def delete(self, user_id, **kwargs):
         abort_if_user_not_found(user_id)
+        # Сделать удаление зависимостей
         db_sess = db_session.create_session()
         users = db_sess.query(User).get(user_id)
         db_sess.delete(users)

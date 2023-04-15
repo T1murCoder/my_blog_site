@@ -108,3 +108,9 @@ def edit_comment(comment_id):
     form.text.data = comment.text
     
     return render_template("edit_comment.html", title='Edit comment', form=form, user=current_user)
+
+
+@views.route("/profile")
+@login_required
+def view_profile():
+    return "Your profile"
