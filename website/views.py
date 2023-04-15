@@ -5,7 +5,7 @@ from data import db_session
 from data.news_posts import NewsPost
 from data.comments import Comment
 from data.likes import Like
-from .forms.CreateComment import CommentForm
+from .forms.CreateCommentForm import CommentForm
 
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
@@ -87,6 +87,7 @@ def delete_comment(comment_id):
     db_sess.delete(comment)
     db_sess.commit()
     return redirect(url_for('views.view_post', post_id=post_id))
+
 
 @views.route("/edit-comment/<int:comment_id>", methods=['GET', 'POST'])
 @login_required
