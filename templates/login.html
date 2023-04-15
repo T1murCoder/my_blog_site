@@ -5,7 +5,7 @@
 <div class="container row">
   <div class="col-lg-5 col-sm-7 mx-auto">
 <form method="POST">
-  <h3 align="center">Login</h3>
+  <h3 align="center">Вход</h3>
   {{ form.hidden_tag() }}
   <p>
       {{ form.email.label }}<br>
@@ -32,6 +32,7 @@
         {{message}}
     </div>
   {% endif %}
+  <p><a href="{{url_for('auth.sign_up')}}">Нет аккаунта? Зарегистрироваться</a></p>
 </form>
 </div>
 </div>
