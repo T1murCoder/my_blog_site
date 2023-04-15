@@ -98,3 +98,7 @@
 .btn-comment-down {
     margin-right: 10px;
 }
+
+#admin_cards .card {
+    height: 175px;
+}
