@@ -14,6 +14,6 @@ class Comment(SqlAlchemyBase, SerializerMixin):
                                      default=datetime.datetime.now)
     author = orm.relationship("User")
     author_id = sqlalchemy.Column(sqlalchemy.Integer, 
-                                sqlalchemy.ForeignKey("users.id"))
+                                sqlalchemy.ForeignKey("users.id", ondelete="CASCADE"))
     post = orm.relationship("NewsPost")
     post_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('posts.id', ondelete="CASCADE"), nullable=False)

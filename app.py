@@ -14,6 +14,7 @@ def create_app():
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
     login_manager.login_message = "Пожалуйста, войдите в аккаунт"
+    login_manager.login_message_category = "error"
     api = Api(app)
 
     api.add_resource(users_resource.UsersListResource, '/api/v2/users', '/api/v2/users/<params>')

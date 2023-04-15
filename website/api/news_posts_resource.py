@@ -31,6 +31,15 @@ class NewsPostsResource(Resource):
         abort_if_post_not_found(post_id)
         db_sess = db_session.create_session()
         post = db_sess.query(NewsPost).get(post_id)
+        
+        comments = post.comments
+        for comment in comments:
+            db_sess.delete(comment)
+        
+        likes = post.likes
+        for like in likes:
+            db_sess.delete(like)
+        
         db_sess.delete(post)
         db_sess.commit()
         return jsonify({'success': 'OK'})

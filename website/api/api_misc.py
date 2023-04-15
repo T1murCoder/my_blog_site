@@ -15,9 +15,11 @@ def token_required(func):
 
 
 # Проверка аргументов
-def check_args(args):
+def check_args(args: str):
     try:
         # TODO: Можно переделать в словарь через map
+        if args[0] == "?":
+            args.replace("?", "", 1)
         args = args.split('&')
         
         for arg in args:

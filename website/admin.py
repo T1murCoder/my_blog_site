@@ -1,9 +1,11 @@
-from flask import Blueprint, render_template, abort, redirect, url_for, flash
+from flask import Blueprint, render_template, abort, redirect, url_for, flash, current_app, request
 from functools import wraps
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from .forms.admin.CreatePostForm import CreatePostForm
 from data.news_posts import NewsPost
+import requests
 from data import db_session
+from .system.config import request_params, url
 
 admin = Blueprint("admin", __name__, template_folder="../templates/admin", static_folder="../static")
 
@@ -76,7 +78,15 @@ def view_posts():
 @admin.route('/delete-post/<int:post_id>')
 @admin_required
 def delete_post(post_id):
-    return str(post_id)
+    
+    response = requests.delete(url + f"api/v2/news_posts/{post_id}/token=test")
+    if response:
+        flash("Пост удалён!", "success")
+    else:
+        flash("Такого поста не существует...", "error")
+    
+    back = request.referrer
+    return redirect(back)
 
 
 # Управление постами
@@ -91,17 +101,3 @@ def manage_posts():
 @admin_required
 def manage_users():
     return "Manage users"
-
-
-@admin.route('/move_up/<int:post_id>')
-@admin_required
-def move_post_up(post_id):
-    return str(post_id)
-
-
-@admin.route('/move_down/<int:post_id>')
-@admin_required
-def move_post_down(post_id):
-    return str(post_id)
-
-
