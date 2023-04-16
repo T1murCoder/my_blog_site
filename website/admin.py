@@ -1,11 +1,13 @@
-from flask import Blueprint, render_template, abort, redirect, url_for, flash, current_app, request
+from flask import Blueprint, render_template, abort, redirect, url_for, flash, request
 from functools import wraps
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from .forms.admin.CreatePostForm import CreatePostForm
 from data.news_posts import NewsPost
+from data.tokens import Token
 import requests
 from data import db_session
-from .system.config import request_params, url
+from werkzeug.security import gen_salt
+from .system.config import request_params, url, api_token
 
 admin = Blueprint("admin", __name__, template_folder="../templates/admin", static_folder="../static")
 
@@ -79,7 +81,7 @@ def view_posts():
 @admin_required
 def delete_post(post_id):
     
-    response = requests.delete(url + f"api/v2/news_posts/{post_id}/token=test")
+    response = requests.delete(url + f"api/v2/posts/{post_id}/token={api_token}")
     if response:
         flash("Пост удалён!", "success")
     else:
@@ -101,3 +103,43 @@ def manage_posts():
 @admin_required
 def manage_users():
     return "Manage users"
+
+@admin.route('/manage-tokens')
+@admin_required
+def manage_tokens():
+    db_sess = db_session.create_session()
+    tokens = db_sess.query(Token).all()
+    return render_template("manage_tokens.html", title='Manage tokens', tokens=tokens,  user=current_user)
+
+@admin.route('/add_token')
+@admin_required
+def add_token():
+    def generate_token():
+        db_sess = db_session.create_session()
+        tokens = map(lambda x: x.token, db_sess.query(Token).all())
+        new_token = gen_salt(20)
+        while new_token in tokens:
+            new_token = gen_salt(20)
+        return new_token
+    
+    
+    db_sess = db_session.create_session()
+    token = Token()
+    token.set_token(generate_token())
+    db_sess.add(token)
+    db_sess.commit()
+    back = request.referrer
+    return redirect(back)
+
+
+@admin.route('/delete_token/<int:token_id>')
+@admin_required
+def delete_token(token_id):
+    db_sess = db_session.create_session()
+    token = db_sess.query(Token).get(token_id)
+    if not token:
+        flash("Такого токена не существует", "error")
+        abort(404)
+    db_sess.delete(token)
+    db_sess.commit()
+    return redirect(url_for('admin.manage_tokens'))

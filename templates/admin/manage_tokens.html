@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h3 align="center">Manage tokens</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">token</th>
+                <th scope="col">date</th>
+                <th scope="col">manage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for token in tokens %}
+            <tr>
+                <th scope="row">{{token.id}}</td>
+                <td>{{token.token}}</td>
+                <td>{{token.created_date}}</td>
+                <td><a class="btn btn-danger" href="{{url_for('admin.delete_token', token_id=token.id)}}"><i class="bi bi-trash"></i>Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-success" href="{{url_for('admin.add_token')}}">Add token</a>
+</div>
+{% endblock %}

@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, abort, redirect, url_for, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from functools import wraps
+from data import db_session
+from data.tokens import Token
 
 
 # Для доступа по токену
@@ -35,7 +37,9 @@ def check_args(args: str):
 # Проверка токена в базе данных
 def check_token(token):
     # TODO: Тут проверять токен в бд
-    if token == 'test':
+    db_sess = db_session.create_session()
+    tokens = map(lambda x: x.token, db_sess.query(Token).all())
+    if token == 'HEAD_TOKEN' or token in tokens:
         return True
     return False
 

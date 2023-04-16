@@ -19,8 +19,8 @@ def create_app():
 
     api.add_resource(users_resource.UsersListResource, '/api/v2/users', '/api/v2/users/<params>')
     api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>', '/api/v2/users/<int:user_id>/<params>')
-    api.add_resource(news_posts_resource.NewsPostsListResource, '/api/v2/news_posts', '/api/v2/news_posts/<params>')
-    api.add_resource(news_posts_resource.NewsPostsResource, '/api/v2/news_posts/<int:post_id>', '/api/v2/news_posts/<int:post_id>/<params>')
+    api.add_resource(news_posts_resource.NewsPostsListResource, '/api/v2/posts', '/api/v2/posts/<params>')
+    api.add_resource(news_posts_resource.NewsPostsResource, '/api/v2/posts/<int:post_id>', '/api/v2/posts/<int:post_id>/<params>')
 
     from website.views import views
     from website.auth import auth

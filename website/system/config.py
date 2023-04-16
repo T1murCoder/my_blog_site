@@ -1,4 +1,4 @@
-api_token = "test"
+api_token = "HEAD_TOKEN"
 
 url = "http://localhost:8080/"
 

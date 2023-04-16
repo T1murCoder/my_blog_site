@@ -12,6 +12,7 @@ import argparse
 import requests
 import sys
 import json
+from requests.exceptions import ConnectionError
 
 
 parser = argparse.ArgumentParser(
@@ -25,27 +26,28 @@ parser.add_argument("--json", default=None, help="your json")
 
 
 def make_request(url, method, json_arg=None):
-    if method == 'get':
-        response = requests.get(url)
-    elif method == 'delete':
-        response = requests.delete(url)
-    elif method == 'post':
-        if json_arg:
-            with open(json_arg) as f:
-                data = json.load(f)
-            response = requests.post(url, json=data)
-        else:
-            response = requests.post(url)
-    return response
+    success = False
+    try:
+        if method == 'get':
+            response = requests.get(url)
+        elif method == 'delete':
+            response = requests.delete(url)
+        elif method == 'post':
+            if json_arg:
+                with open(json_arg) as f:
+                    data = json.load(f)
+                response = requests.post(url, json=data)
+            else:
+                response = requests.post(url)
+        success = True
+        return response, success
+    except Exception as ex:
+        success = False
+        return ex.__class__.__name__, success
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    
-    dt = {
-        'posts': 'news_posts',
-        'users': 'users'
-    }
     
     url = "http://localhost:8080/api/v2/"
     resource = args.resource
@@ -58,12 +60,16 @@ if __name__ == "__main__":
             print("Incorrect method")
             sys.exit(1)
     
-    url = url + dt[resource] + '/'
+    url = url + resource + '/'
     if arg_id:
         url = url + arg_id + '/'
     url = url + "token=" + token
     
     print(url)
-    response = make_request(url, method, json_arg)
-    print(response)
-    print(response.json())
+    response, success = make_request(url, method, json_arg)
+    
+    if success:
+        print(response)
+        print(response.json())
+    else:
+        print(response)
