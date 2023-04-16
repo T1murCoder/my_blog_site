@@ -4,6 +4,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from .forms.admin.CreatePostForm import CreatePostForm
 from data.news_posts import NewsPost
 from data.tokens import Token
+from data.users import User
 import requests
 from data import db_session
 from werkzeug.security import gen_salt
@@ -102,7 +103,9 @@ def manage_posts():
 @admin.route('/manage-users')
 @admin_required
 def manage_users():
-    return "Manage users"
+    db_sess = db_session.create_session()
+    users = db_sess.query(User).all()
+    return render_template("manage_users.html", title="Manage users", users=users, user=current_user)
 
 @admin.route('/manage-tokens')
 @admin_required

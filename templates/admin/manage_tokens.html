@@ -2,13 +2,14 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h3 align="center">Manage tokens</h3>
-    <table class="table table-striped">
+    <a class="btn btn-primary" href="{{url_for('admin.admin_panel')}}">Назад</a>
+    <h3 align="center">Manage Tokens</h3>
+    <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
                 <th scope="col">id</th>
                 <th scope="col">token</th>
-                <th scope="col">date</th>
+                <th scope="col">date of creation</th>
                 <th scope="col">manage</th>
             </tr>
         </thead>
