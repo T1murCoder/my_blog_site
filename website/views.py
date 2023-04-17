@@ -114,3 +114,17 @@ def edit_comment(comment_id):
 @login_required
 def view_profile():
     return render_template("user_profile.html", title='Профиль', user=current_user)
+
+@views.route('/change_password')
+@login_required
+def change_password():
+    # Сделать форму
+    # Брать данные из текущего пользователя
+    return "Change password"
+
+
+@views.route('/change_avatar')
+@login_required
+def change_avatar():
+    # Сделать форму
+    return "Change avatar"

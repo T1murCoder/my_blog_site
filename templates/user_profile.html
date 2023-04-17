@@ -8,7 +8,7 @@
             <div class="mr-auto">
                 <div>
                     <img src="{{url_for('static', filename='img/user/avatars/no_avatar.png')}}" class="avatar" width="100" height="100"><br>
-                    <a class="btn btn-outline-secondary btn-sm" href=""><i class="bi bi-pencil-square"></i> Изменить фото</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="{{url_for('views.change_avatar')}}"><i class="bi bi-pencil-square"></i> Изменить фото</a>
                 </div>
             <h1>{{user.name}}</h1>
         </div>
@@ -24,7 +24,7 @@
             </p>
             <p class="card-text"><strong>Пароль</strong><br>
                 ********<br>
-                <a class="btn btn-primary btn-sm" href="">Изменить</a></p>
+                <a class="btn btn-primary btn-sm" href="{{url_for('views.change_password')}}">Изменить</a></p>
         </div>
     </div>
 </div>
