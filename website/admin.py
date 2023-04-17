@@ -151,6 +151,9 @@ def delete_token(token_id):
 @admin.route('/change_admin/<int:user_id>')
 @admin_required
 def change_admin_user(user_id):
+    if user_id == 1 or user_id == current_user.id:
+        abort(404)
+    
     db_sess = db_session.create_session()
     user = db_sess.query(User).get(user_id)
     
@@ -159,6 +162,27 @@ def change_admin_user(user_id):
         abort(404)
     
     user.admin = not user.admin
+    db_sess.commit()
+    
+    return redirect(url_for("admin.manage_users"))
+
+
+@admin.route('/delete_user/<int:user_id>')
+@admin_required
+def delete_user(user_id):
+    if user_id == 1 or user_id == current_user.id:
+        abort(404)
+    
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).get(user_id)
+    
+    for comment in user.comments:
+        db_sess.delete(comment)
+    
+    for like in user.likes:
+        db_sess.delete(like)
+        
+    db_sess.delete(user)
     db_sess.commit()
     
     return redirect(url_for("admin.manage_users"))

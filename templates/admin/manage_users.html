@@ -24,13 +24,13 @@
                 <td>{{db_user.created_date}}</td>
                 <td>{{db_user.admin}}</td>
                 <td>
-                    {% if user.id != db_user.id %}
+                    {% if user.id != db_user.id and db_user.id != 1 %}
                         {% if not db_user.admin %}
                             <a class="btn btn-success" href="{{url_for('admin.change_admin_user', user_id=db_user.id)}}"><i class="bi bi-person-fill-up"></i>Promote</a>
                         {% else %}
                             <a class="btn btn-danger" href="{{url_for('admin.change_admin_user', user_id=db_user.id)}}"><i class="bi bi-person-fill-down"></i>Demote</a>
                         {% endif %}
-                        <a class="btn btn-danger" href=""><i class="bi bi-trash"></i>Delete</a>
+                        <a class="btn btn-danger" href="{{url_for('admin.delete_user', user_id=db_user.id)}}"><i class="bi bi-trash"></i>Delete</a>
                     {% endif %}
                 </td>
             </tr>
