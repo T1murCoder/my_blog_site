@@ -28,7 +28,7 @@ def like_post(post_id):
     db_sess = db_session.create_session()
     post = db_sess.query(NewsPost).get(post_id)
     if not post:
-        flash('Такого поста ну существует!', 'danger')
+        flash('Такого поста ну существует!', 'error')
         return jsonify({'error': 'Post does not exist.'}, 400)
     like = db_sess.query(Like).filter(Like.author_id == current_user.id, Like.post_id == post_id).first()
     if like:
@@ -53,14 +53,14 @@ def view_post(post_id):
     db_sess = db_session.create_session()
     post = db_sess.query(NewsPost).get(post_id)
     if not post:
-        flash("Такого поста не существует!", "danger")
+        flash("Такого поста не существует!", "error")
         abort(404)
     if form.validate_on_submit():
         if not form.text.data:
-            flash("Вы не указали текст комментария!", "Warning")
+            flash("Вы не указали текст комментария!", "warning")
             return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
         if len(form.text.data) > 200:
-            flash("Комментарий слишком длинный!", "Warning")
+            flash("Комментарий слишком длинный!", "warning")
             return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
         comment = Comment(
             text=form.text.data,
@@ -81,7 +81,7 @@ def delete_comment(comment_id):
     db_sess = db_session.create_session()
     comment = db_sess.query(Comment).get(comment_id)
     if not comment:
-        flash("Такого комментария не существует", "danger")
+        flash("Такого комментария не существует", "error")
         abort(404)
     if current_user.id != comment.author_id and not current_user.admin:
         abort(404)
@@ -98,7 +98,7 @@ def edit_comment(comment_id):
     db_sess = db_session.create_session()
     comment = db_sess.query(Comment).get(comment_id)
     if not comment:
-        flash("Такого комментария не существует", "danger")
+        flash("Такого комментария не существует", "error")
         abort(404)
     if current_user.id != comment.author_id:
         abort(404)
@@ -130,11 +130,11 @@ def change_password():
         
         user = db_sess.query(User).get(current_user.id)
         if not user.check_password(old_password):
-            flash("Вы ввели неправильный пароль!", "danger")
+            flash("Вы ввели неправильный пароль!", "error")
             return redirect(url_for('views.view_profile'))
         
         if new_password != repeat_new_password:
-            flash("Пароли не совпадают!", "danger")
+            flash("Пароли не совпадают!", "error")
             return redirect(url_for('views.view_profile'))
         
         user.set_password(new_password)

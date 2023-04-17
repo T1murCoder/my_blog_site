@@ -21,7 +21,7 @@ def login():
             login_user(user, remember=form.remember_me.data)
             flash("Вы вошли в аккаунт!", category="success")
             return redirect(url_for('views.home'))
-        flash("Неправильный логин или пароль.", category="danger")
+        flash("Неправильный логин или пароль.", category="error")
     return render_template("login.html", title='Login', form=form, user=current_user)
 
 

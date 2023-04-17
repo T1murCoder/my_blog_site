@@ -44,11 +44,11 @@ def create_post():
         try:
             domain = url.split('/')[2]
         except IndexError:
-            flash("Это не ссылка!", "danger")
+            flash("Это не ссылка!", "error")
             return render_template("create_post.html", title='Create post', form=form, user=current_user)
         
         if not (domain == "t.me" or domain == "telegram.me"):
-            flash("Вы указали неправильную ссылку!", "danger")
+            flash("Вы указали неправильную ссылку!", "error")
             return render_template("create_post.html", title='Create post', form=form, user=current_user)
         
         url = url.split('/', 3)[-1]
