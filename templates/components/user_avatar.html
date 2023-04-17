@@ -1,0 +1,8 @@
+{% macro user_avatar(id, size=100) %}
+
+{% set filename = "img/user/avatars/avatar_" ~ id ~ ".jpg" %}
+{% set alt_file = url_for("static", filename="img/user/avatars/no_avatar.png") %}
+<img src="{{url_for('static', filename=filename)}}" alt="Not Found" onerror="this.src='{{alt_file}}';" class="avatar" width={{size}} height={{size}}><br>
+
+
+{% endmacro %}

@@ -1,4 +1,5 @@
 {% from "components/toast.html" import toast %}
+{% from "components/user_avatar.html" import user_avatar %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +33,11 @@
                 <a class="nav-item nav-link menu-item" href="{{url_for('admin.admin_panel')}}">Admin panel</a>
               {% endif %}
               <div class="dropdown">
-                <a class="nav-item nav-link" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">{{user.name}}</a>
+                <a class="nav-item nav-link" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"><div class="d-flex align-items-center justify-content-end">
+                  <div>{{user.name}}</div>
+                  <div>⠀</div>
+                  <div>{{user_avatar(user.id, 25)}}</div>
+                </div></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="{{url_for('views.view_profile')}}"><i class="bi bi-person-circle"></i> Профиль</a></li>
                   <li><hr class="dropdown-divider"></li>
