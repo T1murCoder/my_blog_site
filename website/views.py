@@ -5,7 +5,9 @@ from data import db_session
 from data.news_posts import NewsPost
 from data.comments import Comment
 from data.likes import Like
+from data.users import User
 from .forms.CreateCommentForm import CommentForm
+from .forms.ChangePasswordForm import ChangePasswordForm
 
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
@@ -26,7 +28,7 @@ def like_post(post_id):
     db_sess = db_session.create_session()
     post = db_sess.query(NewsPost).get(post_id)
     if not post:
-        flash('Такого поста ну существует!', 'error')
+        flash('Такого поста ну существует!', 'danger')
         return jsonify({'error': 'Post does not exist.'}, 400)
     like = db_sess.query(Like).filter(Like.author_id == current_user.id, Like.post_id == post_id).first()
     if like:
@@ -51,7 +53,7 @@ def view_post(post_id):
     db_sess = db_session.create_session()
     post = db_sess.query(NewsPost).get(post_id)
     if not post:
-        flash("Такого поста не существует!", "error")
+        flash("Такого поста не существует!", "danger")
         abort(404)
     if form.validate_on_submit():
         if not form.text.data:
@@ -79,7 +81,7 @@ def delete_comment(comment_id):
     db_sess = db_session.create_session()
     comment = db_sess.query(Comment).get(comment_id)
     if not comment:
-        flash("Такого комментария не существует", "error")
+        flash("Такого комментария не существует", "danger")
         abort(404)
     if current_user.id != comment.author_id and not current_user.admin:
         abort(404)
@@ -96,7 +98,7 @@ def edit_comment(comment_id):
     db_sess = db_session.create_session()
     comment = db_sess.query(Comment).get(comment_id)
     if not comment:
-        flash("Такого комментария не существует", "error")
+        flash("Такого комментария не существует", "danger")
         abort(404)
     if current_user.id != comment.author_id:
         abort(404)
@@ -115,12 +117,31 @@ def edit_comment(comment_id):
 def view_profile():
     return render_template("user_profile.html", title='Профиль', user=current_user)
 
-@views.route('/change_password')
+@views.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
-    # Сделать форму
-    # Брать данные из текущего пользователя
-    return "Change password"
+    form = ChangePasswordForm()
+    
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        old_password = form.old_password.data
+        new_password = form.new_password.data
+        repeat_new_password = form.repeat_new_password.data
+        
+        user = db_sess.query(User).get(current_user.id)
+        if not user.check_password(old_password):
+            flash("Вы ввели неправильный пароль!", "danger")
+            return redirect(url_for('views.view_profile'))
+        
+        if new_password != repeat_new_password:
+            flash("Пароли не совпадают!", "danger")
+            return redirect(url_for('views.view_profile'))
+        
+        user.set_password(new_password)
+        db_sess.commit()
+        flash("Пароль успешно изменён!", "success")
+        return redirect(url_for('views.view_profile'))
+    return render_template("change_password.html", title='Изменение пароля', form=form, user=current_user)
 
 
 @views.route('/change_avatar')
