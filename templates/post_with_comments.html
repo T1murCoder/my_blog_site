@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "components/user_avatar.html" import user_avatar %}
 
 {% block content %}
 <div class="container" style="margin-top: 20px;">
@@ -41,7 +42,7 @@
         <div class="comments">
         {% for comment in post.comments %}
             <div class="card" style="margin-bottom: 20px;">
-                <h6 class="card-header">{{comment.author.name}}</h5>
+                <h6 class="card-header"><div class="d-flex align-items-center"><div>{{user_avatar(comment.author_id, 25)}}</div><div>⠀</div><div>{{comment.author.name}}</div></div></h5>
                 <div class="card-body">
                     <p class="card-text">{{comment.text}}</p>
                     <p class="card-text"><small class="text-muted">{{comment.created_date}}</small></p>
