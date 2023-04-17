@@ -8,6 +8,7 @@ from data.likes import Like
 from data.users import User
 from .forms.CreateCommentForm import CommentForm
 from .forms.ChangePasswordForm import ChangePasswordForm
+from .forms.ChangeAvatarForm import ChangeAvatarForm
 
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
@@ -144,8 +145,16 @@ def change_password():
     return render_template("change_password.html", title='Изменение пароля', form=form, user=current_user)
 
 
-@views.route('/change_avatar')
+@views.route('/change_avatar', methods=['GET', 'POST'])
 @login_required
 def change_avatar():
-    # Сделать форму
-    return "Change avatar"
+    form = ChangeAvatarForm()
+    if form.validate_on_submit():
+        image = request.files.get('avatar')
+
+        with open(f"static/img/user/avatars/avatar_{current_user.id}.jpg", 'wb') as f:
+            f.write(image.read())
+        
+        flash("Аватар успешно изменён!", "success")
+        return redirect(url_for('views.view_profile'))
+    return render_template("change_avatar.html", title="Изменение аватара", form=form, user=current_user)
