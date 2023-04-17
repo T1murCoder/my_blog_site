@@ -102,3 +102,9 @@
 #admin_cards .card {
     height: 175px;
 }
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}

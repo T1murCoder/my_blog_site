@@ -113,4 +113,4 @@ def edit_comment(comment_id):
 @views.route("/profile")
 @login_required
 def view_profile():
-    return "Your profile"
+    return render_template("user_profile.html", title='Профиль', user=current_user)
