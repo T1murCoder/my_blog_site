@@ -5,6 +5,7 @@
 <div class="container row">
     <div class="col-lg-5 col-sm-7 mx-auto">
       <form method="POST" action="">
+        <a class="btn btn-primary" href="{{url_for('views.view_profile')}}">Назад</a>
         <h3 align="center">Редактирование комментария</h3>
         {{ form.hidden_tag() }}
         <p>
