@@ -146,3 +146,19 @@ def delete_token(token_id):
     db_sess.delete(token)
     db_sess.commit()
     return redirect(url_for('admin.manage_tokens'))
+
+
+@admin.route('/change_admin/<int:user_id>')
+@admin_required
+def change_admin_user(user_id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).get(user_id)
+    
+    if not user:
+        flash("Такого пользователя не существует", "error")
+        abort(404)
+    
+    user.admin = not user.admin
+    db_sess.commit()
+    
+    return redirect(url_for("admin.manage_users"))
