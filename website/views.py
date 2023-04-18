@@ -12,6 +12,7 @@ from .forms.ChangeAvatarForm import ChangeAvatarForm
 from datetime import datetime
 from sqlalchemy import func
 import os
+from flask_wtf.file import FileStorage
 
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
@@ -110,6 +111,7 @@ def delete_comment(comment_id):
         os.rmdir("static/" + '/'.join(image.split('/')[:-1]))
     db_sess.delete(comment)
     db_sess.commit()
+    flash("Комментарий удалён!", "success")
     return redirect(url_for('views.view_post', post_id=post_id))
 
 
@@ -126,12 +128,37 @@ def edit_comment(comment_id):
         abort(404)
     
     if form.validate_on_submit():
+        post_id = comment.post_id
+        
         comment.text = form.text.data
+        
+        if comment.images:
+            images = comment.images.split('; ')
+            
+            for image in images:
+                os.remove("static/" + image)
+            os.rmdir("static/" + '/'.join(image.split('/')[:-1]))
+        
+        files = form.files.data
+        file_names = []
+        
+        for i, file in enumerate(files):
+            if not file:
+                continue
+            filename = f"static/img/user/content/{post_id}/{comment_id}/{i + 1}.jpg"
+            file_names.append(filename.split('/', 1)[1])
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+            
+            with open(filename, 'wb') as f:
+                f.write(file.read())
+        
+        comment.images = "; ".join(file_names)
+        
         db_sess.commit()
         return redirect(url_for('views.view_post', post_id=comment.post_id))
     form.text.data = comment.text
     
-    return render_template("edit_comment.html", title='Edit comment', form=form, user=current_user)
+    return render_template("edit_comment.html", title='Edit comment', comment=comment, form=form, user=current_user)
 
 
 @views.route("/profile")
