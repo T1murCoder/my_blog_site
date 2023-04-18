@@ -5,5 +5,5 @@ from flask_wtf.file import FileAllowed
 
 
 class ChangeAvatarForm(FlaskForm):
-    avatar = FileField("Прикрепите изображение", validators=[DataRequired(), FileAllowed(['jpg', 'png'], 'Неправильное расширение файла!')])
+    avatar = FileField("Прикрепите изображение", validators=[DataRequired(), FileAllowed(['png', 'jpeg', 'jpg'], 'Неправильное расширение файла!')])
     submit = SubmitField('Изменить')

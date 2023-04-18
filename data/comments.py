@@ -10,6 +10,7 @@ class Comment(SqlAlchemyBase, SerializerMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer, 
                            primary_key=True, autoincrement=True)
     text = sqlalchemy.Column(sqlalchemy.String(200), nullable=False)
+    images = sqlalchemy.Column(sqlalchemy.String)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime, 
                                      default=datetime.datetime.now)
     author = orm.relationship("User")

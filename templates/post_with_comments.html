@@ -18,24 +18,25 @@
         </div>
     </div>
     <div class="row col-lg-7 col-sm-9 mx-auto">
-        <form method="POST" action="">
+        <form method="POST" action="" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <p>
                 {{form.text.label}}<br>
                 {{form.text(class="form-control col-lg-5 col-sm-6", maxlength=200)}}
-                <div class="row justify-content-end">
-                    <div class="col-4 col-lg-2 col-sm-3 col-xs-3" style="margin-right: 5px">
-                        {{ form.submit(type="submit", class="btn btn-primary") }}
-                    </div>
-                </div>
-                <br>
-                {% for error in form.text.errors %} 
+                {{form.files(class="form-control")}}
+                {% for error in form.files.errors %} 
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
                 </p>
                     {% endfor %}
                 
             </p>
+                <div class="row justify-content-end">
+                    <div class="col-4 col-lg-2 col-sm-3 col-xs-3" style="margin-right: 5px">
+                        {{ form.submit(type="submit", class="btn btn-primary") }}
+                    </div>
+                </div>
+                <br>
         </form>
     <h5>Комментариев: {{post.comments|length}}</h3>
     {% if post.comments %}
@@ -44,6 +45,16 @@
             <div class="card" style="margin-bottom: 20px;">
                 <h6 class="card-header"><div class="d-flex align-items-center"><div>{{user_avatar(comment.author_id, 25)}}</div><div>⠀</div><div>{{comment.author.name}}</div></div></h5>
                 <div class="card-body">
+                    {% if comment.images %}
+                        <div class="attached-images d-flex flex-lg-row flex-column">
+                            {% for image in comment.images.split('; ') %}
+                                <div class="col-lg-3 col-sm-3 col-xs-3 attached-image">
+                                    <img src="{{url_for('static', filename=image)}}" class="card-img" alt="">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <hr>
+                    {% endif %}
                     <p class="card-text">{{comment.text}}</p>
                     <p class="card-text"><small class="text-muted">{{comment.created_date|time_ago}}</small></p>
                     {% if user.id == comment.author_id %}

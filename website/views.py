@@ -10,6 +10,8 @@ from .forms.CreateCommentForm import CommentForm
 from .forms.ChangePasswordForm import ChangePasswordForm
 from .forms.ChangeAvatarForm import ChangeAvatarForm
 from datetime import datetime
+from sqlalchemy import func
+import os
 
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
@@ -50,7 +52,6 @@ def like_post(post_id):
 @views.route("/posts/<int:post_id>", methods=['GET', 'POST'])
 @login_required
 def view_post(post_id):
-    # TODO: Сделать отображение времени по другому
     form = CommentForm()
     db_sess = db_session.create_session()
     post = db_sess.query(NewsPost).get(post_id)
@@ -58,16 +59,29 @@ def view_post(post_id):
         flash("Такого поста не существует!", "error")
         abort(404)
     if form.validate_on_submit():
-        if not form.text.data:
-            flash("Вы не указали текст комментария!", "warning")
-            return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
+
         if len(form.text.data) > 200:
             flash("Комментарий слишком длинный!", "warning")
             return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
+        new_comment_id = db_sess.query(func.max(Comment.id)).first()[0]
+        
+        if form.files.data:
+            files = form.files.data
+            file_names = []
+            # тут сохраняются файлы по принципу "static/img/user/content/{id поста}/{id комментария}/{номер изображения}.jpg"
+            for i, file in enumerate(files):
+                filename = f"static/img/user/content/{post_id}/{new_comment_id}/{i + 1}.jpg"
+                file_names.append(filename.split('/', 1)[1])
+                os.makedirs(os.path.dirname(filename), exist_ok=True)
+                
+                with open(filename, 'wb') as f:
+                    f.write(file.read())
+
         comment = Comment(
             text=form.text.data,
             author_id=current_user.id,
-            post_id=post_id
+            post_id=post_id,
+            images="; ".join(file_names)
         )
         db_sess.add(comment)
         db_sess.commit()
@@ -88,6 +102,9 @@ def delete_comment(comment_id):
     if current_user.id != comment.author_id and not current_user.admin:
         abort(404)
     post_id = comment.post_id
+    if comment.images:
+        images = comment.images.split('; ')
+        #    for image in images:
     db_sess.delete(comment)
     db_sess.commit()
     return redirect(url_for('views.view_post', post_id=post_id))
