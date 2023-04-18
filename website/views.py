@@ -9,6 +9,7 @@ from data.users import User
 from .forms.CreateCommentForm import CommentForm
 from .forms.ChangePasswordForm import ChangePasswordForm
 from .forms.ChangeAvatarForm import ChangeAvatarForm
+from datetime import datetime
 
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
@@ -158,3 +159,28 @@ def change_avatar():
         flash("Аватар успешно изменён!", "success")
         return redirect(url_for('views.view_profile'))
     return render_template("change_avatar.html", title="Изменение аватара", form=form, user=current_user)
+
+
+@views.app_template_filter("time_ago")
+def time_ago(start_time):
+    end_time = datetime.now()
+    diff = datetime.now() - start_time
+    
+    seconds = diff.seconds + diff.days * 24 * 3600
+    minutes = seconds // 60
+    hours = minutes // 60
+    days = diff.days
+    months = end_time.month - start_time.month + 12 * (end_time.year - start_time.year)
+    years = months // 12
+    if years > 0:
+        return f"{years} year(s) ago"
+    elif months > 0:
+        return f"{months} month(s) ago"
+    elif days > 0:
+        return f"{days} day(s) ago"
+    elif hours > 0:
+        return f"{hours} hour(s) ago"
+    elif minutes > 0:
+        return f"{minutes} minute(s) ago"
+    else:
+        return f"{seconds} second(s) ago"

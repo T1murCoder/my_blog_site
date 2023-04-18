@@ -45,7 +45,7 @@
                 <h6 class="card-header"><div class="d-flex align-items-center"><div>{{user_avatar(comment.author_id, 25)}}</div><div>⠀</div><div>{{comment.author.name}}</div></div></h5>
                 <div class="card-body">
                     <p class="card-text">{{comment.text}}</p>
-                    <p class="card-text"><small class="text-muted">{{comment.created_date}}</small></p>
+                    <p class="card-text"><small class="text-muted">{{comment.created_date|time_ago}}</small></p>
                     {% if user.id == comment.author_id %}
                         <a class="btn btn-sm btn-outline-primary btn-comment-down" href="{{url_for('views.edit_comment', comment_id=comment.id)}}"><i class="bi bi-pencil"></i></a>
                     {% endif %}
