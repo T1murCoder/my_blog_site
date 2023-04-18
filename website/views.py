@@ -63,7 +63,7 @@ def view_post(post_id):
         if len(form.text.data) > 200:
             flash("Комментарий слишком длинный!", "warning")
             return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
-        new_comment_id = db_sess.query(func.max(Comment.id)).first()[0]
+        new_comment_id = db_sess.query(func.max(Comment.id)).first()[0] + 1
         
         if form.files.data:
             files = form.files.data
@@ -104,7 +104,10 @@ def delete_comment(comment_id):
     post_id = comment.post_id
     if comment.images:
         images = comment.images.split('; ')
-        #    for image in images:
+        # + Сделать редактирование
+        for image in images:
+            os.remove("static/" + image)
+        os.rmdir("static/" + '/'.join(image.split('/')[:-1]))
     db_sess.delete(comment)
     db_sess.commit()
     return redirect(url_for('views.view_post', post_id=post_id))
