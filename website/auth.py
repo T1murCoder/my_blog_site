@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from .forms.LoginForm import LoginForm
 from .forms.RegisterForm import RegisterForm
 from .forms.PasswordRecoveryForm import PasswordRecoveryForm
+from .forms.ResetPasswordForm import ResetPasswordForm
 from data.users import User
 from data import db_session
 from .mail.mail import send_mail
@@ -71,14 +72,43 @@ def password_recovery():
         
         email = form.email.data
         
-        user = db_sess.query(User).filter(email=email)
+        user = db_sess.query(User).filter(User.email == email).first()
         
         if not user:
             flash("Что-то пошло не так... Возможно вы указали неверную почту", "error")
             return redirect(url_for('auth.login'))
         
-        send_mail(email)
+        send_password_reset_email(user)
         flash("Письмо отправлено на почту!", "success")
         return redirect(url_for('auth.login'))
             
     return render_template("password_recovery.html", title="Сброс пароля", form=form, user=current_user)
+
+
+def send_password_reset_email(user: User):
+    token = user.get_reset_password_token()
+    send_mail(user.email, html_body=render_template("email/email_template.html", user=user, token=token))
+
+
+@auth.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('views.home'))
+    
+    db_sess = db_session.create_session()
+    user_id = User.verify_reset_password_token(token)
+    
+    if not user_id:
+        return redirect(url_for('views.home'))
+    
+    user = db_sess.query(User).get(user_id)
+    
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        
+        user.set_password(form.password.data)
+        db_sess.commit()
+        
+        flash('Ваш пароль сброшен!', "success")
+        return redirect(url_for('auth.login'))
+    return render_template('reset_password.html', title='Сброс пароля', user=current_user, form=form)
