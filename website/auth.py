@@ -2,9 +2,10 @@ from flask import Blueprint, render_template, redirect, url_for, abort, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from .forms.LoginForm import LoginForm
 from .forms.RegisterForm import RegisterForm
+from .forms.PasswordRecoveryForm import PasswordRecoveryForm
 from data.users import User
 from data import db_session
-
+from .mail.mail import send_mail
 
 auth = Blueprint("auth", __name__, template_folder="../templates")
 
@@ -22,7 +23,7 @@ def login():
             flash("Вы вошли в аккаунт!", category="success")
             return redirect(url_for('views.home'))
         flash("Неправильный логин или пароль.", category="error")
-    return render_template("login.html", title='Login', form=form, user=current_user)
+    return render_template("login.html", title='Авторизация', form=form, user=current_user)
 
 
 @auth.route("/sign-up", methods=['GET', 'POST'])
@@ -33,11 +34,11 @@ def sign_up():
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
             flash("Пароли не совпадают!", "warning")
-            return render_template("signup.html", title='Sign up', form=form, user=current_user)
+            return render_template("signup.html", title='Регистрация', form=form, user=current_user)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             flash("Такой пользователь уже есть!", "warning")
-            return render_template("signup.html", title='Sign up', form=form, user=current_user)
+            return render_template("signup.html", title='Регистрация', form=form, user=current_user)
         user = User(
             name=form.name.data,
             email=form.email.data
@@ -47,7 +48,7 @@ def sign_up():
         db_sess.commit()
         flash("Вы зарегистрированы!", "success")
         return redirect(url_for('auth.login'))
-    return render_template("signup.html", title='Sign up', form=form, user=current_user)
+    return render_template("signup.html", title='Регистрация', form=form, user=current_user)
 
 
 @auth.route('/logout')
@@ -56,3 +57,28 @@ def logout():
     logout_user()
     flash("Вы вышли из аккаунта")
     return redirect("/")
+
+
+@auth.route("/password_recovery", methods=['GET', 'POST'])
+def password_recovery():
+    if current_user.is_authenticated:
+        return redirect(url_for('views.home'))
+    
+    
+    form = PasswordRecoveryForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        
+        email = form.email.data
+        
+        user = db_sess.query(User).filter(email=email)
+        
+        if not user:
+            flash("Что-то пошло не так... Возможно вы указали неверную почту", "error")
+            return redirect(url_for('auth.login'))
+        
+        send_mail(email)
+        flash("Письмо отправлено на почту!", "success")
+        return redirect(url_for('auth.login'))
+            
+    return render_template("password_recovery.html", title="Сброс пароля", form=form, user=current_user)

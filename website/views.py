@@ -12,7 +12,6 @@ from .forms.ChangeAvatarForm import ChangeAvatarForm
 from datetime import datetime
 from sqlalchemy import func
 import os
-from flask_wtf.file import FileStorage
 
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
@@ -165,6 +164,7 @@ def edit_comment(comment_id):
 @login_required
 def view_profile():
     return render_template("user_profile.html", title='Профиль', user=current_user)
+
 
 @views.route('/change_password', methods=['GET', 'POST'])
 @login_required

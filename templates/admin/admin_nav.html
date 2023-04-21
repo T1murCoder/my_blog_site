@@ -4,8 +4,9 @@
     <div class="position-sticky pt-3">
         <nav class="nav flex-column" id="admin-nav">
             <a class="nav-link active" aria-current="page" href="{{url_for('admin.admin_panel')}}">Dashboard</a>
-            <a class="nav-link" href="#">Users</a>
-            <a class="nav-link" href="#">Settings</a>
+            <a class="nav-link" href="{{url_for('admin.manage_users')}}">Users</a>
+            <a class="nav-link" href="{{url_for('admin.manage_tokens')}}">Tokens</a>
+            <a class="nav-link" href="{{url_for('admin.manage_posts')}}">Posts</a>
           </nav>
     </div>
 </div>
