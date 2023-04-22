@@ -55,6 +55,7 @@
     <li>Установите <a href="https://www.python.org/downloads/windows/">Python 3.9.13</a> или выше, и выберите галочку "Add Python to PATH".</li>
     <li>Установите <a href="https://git-scm.com/download/win">git</a>.</li>
     <li>Склонируйте репозиторий <code>git clone https://github.com/T1murCoder/my_blog_site.git</code>.</li>
+    <li>Установите необходимые зависимости <code>py -m pip install -r requirements.txt</code></li>
     <li>Запустите файл <code>app.py</code>.</li>
   </ol>
 </p>
