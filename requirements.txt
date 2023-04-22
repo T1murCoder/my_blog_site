@@ -10,3 +10,4 @@ WTForms==3.0.1
 Werkzeug==2.2.3
 PyJWT==2.6.0
 requests==2.28.1
+python-dotenv==0.21.0
