@@ -36,7 +36,6 @@ class NewsPostsResource(Resource):
         for comment in comments:
             if comment.images:
                 images = comment.images.split('; ')
-                # + Сделать редактирование
                 for image in images:
                     os.remove("static/" + image)
                 os.rmdir("static/" + '/'.join(image.split('/')[:-1]))

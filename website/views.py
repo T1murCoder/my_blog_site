@@ -16,6 +16,7 @@ import os
 views = Blueprint("views", __name__, template_folder="../templates", static_url_path="../static")
 
 
+# Домашняя страница
 @views.route("/")
 @views.route("/home")
 def home():
@@ -26,6 +27,7 @@ def home():
     return render_template("home.html", title='Home', posts=posts, user=current_user)
 
 
+# Лайк поста (приходит 'POST' запрос с помощью JS)
 @views.route("/like/<int:post_id>", methods=['POST'])
 @login_required
 def like_post(post_id):
@@ -49,6 +51,7 @@ def like_post(post_id):
     return jsonify({"likes": len(post.likes), "liked": current_user.id in map(lambda x: x.author_id, post.likes)})
 
 
+# Просмотр поста
 @views.route("/posts/<int:post_id>", methods=['GET', 'POST'])
 @login_required
 def view_post(post_id):
@@ -91,6 +94,7 @@ def view_post(post_id):
     return render_template("post_with_comments.html", title='View post', post=post, form=form, user=current_user)
 
 
+# Удаление комментария
 @views.route("/delete-comment/<int:comment_id>")
 @login_required
 def delete_comment(comment_id):
@@ -104,7 +108,7 @@ def delete_comment(comment_id):
     post_id = comment.post_id
     if comment.images:
         images = comment.images.split('; ')
-        # + Сделать редактирование
+
         for image in images:
             os.remove("static/" + image)
         os.rmdir("static/" + '/'.join(image.split('/')[:-1]))
@@ -114,6 +118,7 @@ def delete_comment(comment_id):
     return redirect(url_for('views.view_post', post_id=post_id))
 
 
+# Редактирование комментария
 @views.route("/edit-comment/<int:comment_id>", methods=['GET', 'POST'])
 @login_required
 def edit_comment(comment_id):
@@ -160,12 +165,14 @@ def edit_comment(comment_id):
     return render_template("edit_comment.html", title='Edit comment', comment=comment, form=form, user=current_user)
 
 
+# Просмотр профиля
 @views.route("/profile")
 @login_required
 def view_profile():
     return render_template("user_profile.html", title='Профиль', user=current_user)
 
 
+# Изменение пароля
 @views.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
@@ -193,6 +200,7 @@ def change_password():
     return render_template("change_password.html", title='Изменение пароля', form=form, user=current_user)
 
 
+# Изменение аватара
 @views.route('/change_avatar', methods=['GET', 'POST'])
 @login_required
 def change_avatar():
@@ -208,6 +216,7 @@ def change_avatar():
     return render_template("change_avatar.html", title="Изменение аватара", form=form, user=current_user)
 
 
+# Конвертирует дату в "{количество времени} назад"
 @views.app_template_filter("time_ago")
 def time_ago(start_time):
     end_time = datetime.now()
@@ -233,6 +242,7 @@ def time_ago(start_time):
         return f"{seconds} second(s) ago"
 
 
+# Изменение информации "О себе"
 @views.route('/edit_about', methods=['GET', 'POST'])
 @login_required
 def edit_about():

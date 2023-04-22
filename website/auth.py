@@ -11,6 +11,7 @@ from .mail.mail import send_mail
 auth = Blueprint("auth", __name__, template_folder="../templates")
 
 
+# Авторизация
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if not current_user.is_anonymous:
@@ -27,6 +28,7 @@ def login():
     return render_template("login.html", title='Авторизация', form=form, user=current_user)
 
 
+# Регистрация
 @auth.route("/sign-up", methods=['GET', 'POST'])
 def sign_up():
     if not current_user.is_anonymous:
@@ -52,6 +54,7 @@ def sign_up():
     return render_template("signup.html", title='Регистрация', form=form, user=current_user)
 
 
+# Выход из аккаунта
 @auth.route('/logout')
 @login_required
 def logout():
@@ -60,6 +63,7 @@ def logout():
     return redirect("/")
 
 
+# Восстановление пароля
 @auth.route("/password_recovery", methods=['GET', 'POST'])
 def password_recovery():
     if current_user.is_authenticated:
@@ -85,11 +89,13 @@ def password_recovery():
     return render_template("password_recovery.html", title="Сброс пароля", form=form, user=current_user)
 
 
+# Отсылает письмо на указанную почту в user.email
 def send_password_reset_email(user: User):
     token = user.get_reset_password_token()
     send_mail(user.email, "Восстановление пароля", html_body=render_template("email/email_template.html", user=user, token=token))
 
 
+# Сбрасывает пароль
 @auth.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:

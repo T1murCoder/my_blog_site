@@ -107,6 +107,8 @@ def manage_users():
     users = db_sess.query(User).all()
     return render_template("manage_users.html", title="Manage users", users=users, user=current_user)
 
+
+# Управление токенами
 @admin.route('/manage-tokens')
 @admin_required
 def manage_tokens():
@@ -114,6 +116,8 @@ def manage_tokens():
     tokens = db_sess.query(Token).all()
     return render_template("manage_tokens.html", title='Manage tokens', tokens=tokens,  user=current_user)
 
+
+# Создание токена
 @admin.route('/add_token')
 @admin_required
 def add_token():
@@ -125,7 +129,6 @@ def add_token():
             new_token = gen_salt(20)
         return new_token
     
-    
     db_sess = db_session.create_session()
     token = Token()
     token.set_token(generate_token())
@@ -135,6 +138,7 @@ def add_token():
     return redirect(back)
 
 
+# Удаление токена
 @admin.route('/delete_token/<int:token_id>')
 @admin_required
 def delete_token(token_id):
@@ -148,6 +152,7 @@ def delete_token(token_id):
     return redirect(url_for('admin.manage_tokens'))
 
 
+# Изменение прав пользователя
 @admin.route('/change_admin/<int:user_id>')
 @admin_required
 def change_admin_user(user_id):
@@ -167,6 +172,7 @@ def change_admin_user(user_id):
     return redirect(url_for("admin.manage_users"))
 
 
+# Удаление пользователя
 @admin.route('/delete_user/<int:user_id>')
 @admin_required
 def delete_user(user_id):
