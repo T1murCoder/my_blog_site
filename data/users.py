@@ -2,6 +2,7 @@ import datetime
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 from flask_login import UserMixin
+from flask import current_app
 from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -39,7 +40,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, "my_super_secret_key",
+            id = jwt.decode(token, current_app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']
         except:
             return

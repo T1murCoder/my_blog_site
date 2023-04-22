@@ -3,6 +3,7 @@ from flask_restful import reqparse, abort, Resource
 from data import db_session
 from data.users import User
 from .api_misc import admin_or_token_required
+import os
 
 
 parser = reqparse.RequestParser()
@@ -31,10 +32,23 @@ class UsersResource(Resource):
     @admin_or_token_required
     def delete(self, user_id, **kwargs):
         abort_if_user_not_found(user_id)
-        # Сделать удаление зависимостей
+        
         db_sess = db_session.create_session()
-        users = db_sess.query(User).get(user_id)
-        db_sess.delete(users)
+        user = db_sess.query(User).get(user_id)
+        
+        for comment in user.comments:
+            if comment.images:
+                images = comment.images.split('; ')
+                # + Сделать редактирование
+                for image in images:
+                    os.remove("static/" + image)
+                os.rmdir("static/" + '/'.join(image.split('/')[:-1]))
+            db_sess.delete(comment)
+    
+        for like in user.likes:
+            db_sess.delete(like)
+        
+        db_sess.delete(user)
         db_sess.commit()
         return jsonify({'success': 'OK'})
 
