@@ -9,7 +9,8 @@
 <img src="https://user-images.githubusercontent.com/110349339/233779782-e301217f-bc38-425f-8acb-fb4346345cde.png" style="width: 50%; height: 50%"><br>
 </p>
 <div>
-<h2>Возможности пользователя</h2>
+  <h2>Features</h2>
+<h3>Возможности пользователя</h3>
 <p>
 <ul>
   <li>Зарегистрироваться для того, чтобы оценивать и комментировать записи</li>
@@ -24,7 +25,7 @@
 </p>
 </div>
 <div>
-<h2>Возможности администратора</h2>
+<h3>Возможности администратора</h3>
 <p>
 <ul>
   <li>Управление постами (Просмотр, создание, удаление)</li>
@@ -35,13 +36,26 @@
 </p>
 </div>
 <div>
-<h2>API</h2>
+<h3>API</h3>
 <p>
 <ul>
   <li>Доступны ресуры: users, posts</li>
   <li>Для использование нужно иметь ключ или админку</li>
   <li>Есть скрипт, облегчающий работу с API</li>
+  <li>Возможно использование в других сервисах (Например, общий аккаунт)</li>
 <ul>
 </p>
 </div>
-
+<div>
+<div>
+<h2>Установка</h2>
+<p>
+<h3>Автоматическая установка на Windows</h3>
+  <ol>
+    <li>Установите <a href="https://www.python.org/downloads/windows/">Python 3.9.13</a>, и выберите галочку "Add Python to PATH".</li>
+    <li>Установите <a href="https://git-scm.com/download/win">git</a>.</li>
+    <li>Склонируйте репозиторий <code>git clone https://github.com/T1murCoder/my_blog_site.git</code>.</li>
+    <li>Запустите файл <code>app.py</code>.</li>
+  </ol>
+</p>
+</div>
