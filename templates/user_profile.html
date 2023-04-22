@@ -20,6 +20,27 @@
             <hr>
             <h6 class="card-title">Подробная информация о пользователе:</h6>
             <br>
+            <div class="card">
+                <div class="card-header">
+                    <strong>О себе:</strong>
+                </div>
+                <div class="card-body">
+                  <blockquote class="blockquote mb-0">
+                    <p>
+                    {% if user.about %}
+                    {% autoescape false %}
+                    {% set break = '<' ~ 'br' ~ '>' %}
+                        {{user.about|replace('\n', break) }}
+                    {% endautoescape %}
+                    {% else %}
+                        Расскажите о себе =)
+                    {% endif %}
+                    </p>
+                    <br><a class="btn btn-primary btn-sm" href="{{url_for('views.edit_about')}}">Изменить</a></p>
+                  </blockquote>
+                </div>
+              </div>
+            <br>
             <p class="card-text"><strong>Адрес электронной почты</strong><br>
                 {{user.email}}
             </p>

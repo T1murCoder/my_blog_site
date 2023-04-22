@@ -21,6 +21,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime, 
                                      default=datetime.datetime.now)
+    about = sqlalchemy.Column(sqlalchemy.Text(140), nullable=True)
     comments = orm.relationship("Comment", back_populates="author")
     likes = orm.relationship("Like", back_populates="author")
 

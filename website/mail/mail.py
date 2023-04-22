@@ -4,17 +4,16 @@ import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
-from flask import render_template
 
 
-def send_mail(email, text_body=None, html_body=None):
+def send_mail(email, subject, text_body=None, html_body=None):
     addr_from = os.getenv('FROM')
     password = os.getenv('PASSWORD')
     
     msg = MIMEMultipart()
     msg['From'] = addr_from
     msg['To'] = email
-    msg['Subject'] = "Восстановление пароля"
+    msg['Subject'] = subject
     if text_body:
         msg.attach(MIMEText(text_body, "plain"))
     if html_body:

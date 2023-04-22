@@ -87,7 +87,7 @@ def password_recovery():
 
 def send_password_reset_email(user: User):
     token = user.get_reset_password_token()
-    send_mail(user.email, html_body=render_template("email/email_template.html", user=user, token=token))
+    send_mail(user.email, "Восстановление пароля", html_body=render_template("email/email_template.html", user=user, token=token))
 
 
 @auth.route('/reset_password/<token>', methods=['GET', 'POST'])

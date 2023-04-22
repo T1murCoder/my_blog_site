@@ -9,6 +9,7 @@ from data.users import User
 from .forms.CreateCommentForm import CommentForm
 from .forms.ChangePasswordForm import ChangePasswordForm
 from .forms.ChangeAvatarForm import ChangeAvatarForm
+from .forms.ChangeAboutForm import ChangeAboutForm
 from datetime import datetime
 from sqlalchemy import func
 import os
@@ -231,3 +232,25 @@ def time_ago(start_time):
         return f"{minutes} minute(s) ago"
     else:
         return f"{seconds} second(s) ago"
+
+
+@views.route('/edit_about', methods=['GET', 'POST'])
+@login_required
+def edit_about():
+    form = ChangeAboutForm()
+    
+    db_sess = db_session.create_session()
+    
+    
+    if form.validate_on_submit():
+        user = db_sess.query(User).get(current_user.id)
+        user.about = form.about.data
+        
+        db_sess.commit()
+        
+        flash('Информация "О себе" изменена!', 'success')
+        return redirect(url_for('views.view_profile'))
+    
+    form.about.data = current_user.about
+    
+    return render_template('change_about.html', title='О себе', form=form, user=current_user)
