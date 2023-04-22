@@ -1,7 +1,6 @@
 from flask import jsonify
-from flask_restful import reqparse, abort, Api, Resource
+from flask_restful import reqparse, abort, Resource
 from data import db_session
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data.news_posts import NewsPost
 from .api_misc import admin_or_token_required
 

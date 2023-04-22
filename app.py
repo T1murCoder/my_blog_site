@@ -1,8 +1,7 @@
 from flask import Flask
 from data import db_session
-from os import path
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from flask_restful import reqparse, abort, Api, Resource
+from flask_login import LoginManager
+from flask_restful import Api
 from website.api import users_resource, news_posts_resource
 from data.users import User
 from dotenv import load_dotenv

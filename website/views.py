@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, flash, abort, redirect, url_for, request, jsonify
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from requests import get
+from flask_login import login_required, current_user
 from data import db_session
 from data.news_posts import NewsPost
 from data.comments import Comment

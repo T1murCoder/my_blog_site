@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, redirect, url_for, flash, request
 from functools import wraps
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_login import current_user
 from .forms.admin.CreatePostForm import CreatePostForm
 from data.news_posts import NewsPost
 from data.tokens import Token
@@ -8,7 +8,7 @@ from data.users import User
 import requests
 from data import db_session
 from werkzeug.security import gen_salt
-from .system.config import request_params, url, api_token
+from .system.config import url, api_token
 
 admin = Blueprint("admin", __name__, template_folder="../templates/admin", static_folder="../static")
 

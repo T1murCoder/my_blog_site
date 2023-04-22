@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, EmailField, TextAreaField, MultipleFileField
-from wtforms.validators import DataRequired, Optional, Length, ValidationError
-from flask_wtf.file import FileAllowed, FileRequired, FileStorage
+from wtforms import SubmitField, TextAreaField, MultipleFileField
+from wtforms.validators import Optional, Length, ValidationError
+from flask_wtf.file import FileAllowed
 
 
 def at_least_one_required():

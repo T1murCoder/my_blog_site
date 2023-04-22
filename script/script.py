@@ -12,7 +12,6 @@ import argparse
 import requests
 import sys
 import json
-from requests.exceptions import ConnectionError
 
 
 parser = argparse.ArgumentParser(

@@ -1,8 +1,7 @@
 import datetime
 import sqlalchemy
-from .db_session import SqlAlchemyBase, create_session
+from .db_session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
-from werkzeug.security import gen_salt
 
 
 class Token(SqlAlchemyBase, SerializerMixin):

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, EmailField, TextAreaField
-from wtforms.validators import DataRequired, Length
+from wtforms import SubmitField, TextAreaField
+from wtforms.validators import Length
 
 
 class ChangeAboutForm(FlaskForm):
