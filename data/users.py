@@ -46,3 +46,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         except:
             return
         return id
+    
+    
+    def __str__(self):
+        return f"[{self.id}; {self.name}]"

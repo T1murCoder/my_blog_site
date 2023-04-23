@@ -22,7 +22,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            current_app.logger.info(f"User has logged in: id={user.id}; name={user.name}")
+            current_app.logger.info(f"User has logged in: {current_user}")
             flash("Вы вошли в аккаунт!", category="success")
             return redirect(url_for('views.home'))
         flash("Неправильный логин или пароль.", category="error")
@@ -50,7 +50,7 @@ def sign_up():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        current_app.logger.info(f"New user has registered: id={user.id}; name={user.name}")
+        current_app.logger.info(f"New user has registered: {user}")
         flash("Вы зарегистрированы!", "success")
         return redirect(url_for('auth.login'))
     return render_template("signup.html", title='Регистрация', form=form, user=current_user)
@@ -60,7 +60,7 @@ def sign_up():
 @auth.route('/logout')
 @login_required
 def logout():
-    current_app.logger.info(f"User logged out: id={current_user.id}; name={current_user.name}")
+    current_app.logger.info(f"User logged out: {current_user}")
     logout_user()
     flash("Вы вышли из аккаунта")
     return redirect("/")
@@ -123,7 +123,7 @@ def reset_password(token):
         user.set_password(form.password.data)
         db_sess.commit()
         
-        current_app.logger.info(f"User has recovered the password: id={user.id}; name={user.name}")
+        current_app.logger.info(f"User has recovered the password: {current_user}")
         flash('Ваш пароль сброшен!', "success")
         return redirect(url_for('auth.login'))
     return render_template('reset_password.html', title='Сброс пароля', user=current_user, form=form)

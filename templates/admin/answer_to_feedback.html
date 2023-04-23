@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "components/user_avatar.html" import user_avatar %}
+
+{% block content %}
+<div class="container" style="margin-top: 20px;">
+    <a class="btn btn-primary" href="{{url_for('admin.view_feedback_list')}}">Назад</a>
+    <div class="row">
+        <div class="card col-lg-7 mx-auto" style="margin-bottom: 20px;">
+            <h6 class="card-header"><div class="d-flex align-items-center"><div>{{user_avatar(feedback.author_id, 25)}}</div><div>⠀</div><div>{{feedback.author.name}}</div></div></h5>
+                <div class="card-body">
+                    <p class="card-text">{{feedback.text}}</p>
+                    <p class="card-text"><small class="text-muted">{{feedback.created_date|time_ago}}</small></p>
+                </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-7 col-sm-7 mx-auto">
+            <form method="POST">
+              {{ form.hidden_tag() }}
+              <p>
+                  {{ form.answer_feedback.label }}<br>
+                  {{ form.answer_feedback(class="form-control") }}<br>
+                  {% for error in form.answer_feedback.errors %}
+                      <div class="alert alert-danger" role="alert">
+                          {{ error }}
+                      </div>
+                  {% endfor %}
+              </p>
+              <p>{{ form.submit(type="submit", class="btn btn-primary mx-auto d-block col-lg-2 col-sm-5") }}</p>
+            </form>
+    </div>
+</div>
+{% endblock %}

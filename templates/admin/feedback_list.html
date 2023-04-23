@@ -3,15 +3,15 @@
 
 {% block content %}
 <div class="container" style="margin-top: 20px;">
-
+    <a class="btn btn-primary" href="{{url_for('admin.admin_panel')}}">Назад</a>
     {% for feedback in feedback_list %}
-        <div class="row ">
+        <div class="row">
             <div class="card col-lg-7 mx-auto" style="margin-bottom: 20px;">
                 <h6 class="card-header"><div class="d-flex align-items-center"><div>{{user_avatar(feedback.author_id, 25)}}</div><div>⠀</div><div>{{feedback.author.name}}</div></div></h5>
                     <div class="card-body">
                         <p class="card-text">{{feedback.text}}</p>
                         <p class="card-text"><small class="text-muted">{{feedback.created_date|time_ago}}</small></p>
-                        <a class="btn btn-sm btn-outline-primary btn-comment-down" href=""><i class="bi bi-chat-left-text"></i> Answer</a>
+                        <a class="btn btn-sm btn-outline-primary btn-comment-down" href="{{url_for('admin.view_feedback', feedback_id=feedback.id)}}"><i class="bi bi-chat-left-text"></i> Answer</a>
                     </div>
             </div>
         </div>
