@@ -1,4 +1,4 @@
-from flask import jsonify, make_response
+from flask import jsonify, make_response, current_app
 from flask_restful import reqparse, abort, Resource
 from data import db_session
 from data.news_posts import NewsPost
@@ -15,6 +15,7 @@ def abort_if_post_not_found(post_id):
     session = db_session.create_session()
     post = session.query(NewsPost).get(post_id)
     if not post:
+        current_app.logger.warning(f"Post doesn't exist: post_id={post_id}")
         abort(404, message=f"Post {post_id} not found")
 
 
@@ -22,6 +23,8 @@ class NewsPostsResource(Resource):
     @admin_or_token_required
     def get(self, post_id, **kwargs):
         abort_if_post_not_found(post_id)
+        current_app.logger.info(f"'GET' request to [news_posts] resource: post_id={post_id}")
+        
         db_sess = db_session.create_session()
         post = db_sess.query(NewsPost).get(post_id)
         return jsonify({'posts': post.to_dict(only=('id', 'post_tg_url'))})
@@ -29,6 +32,8 @@ class NewsPostsResource(Resource):
     @admin_or_token_required
     def delete(self, post_id, **kwargs):
         abort_if_post_not_found(post_id)
+        current_app.logger.info(f"'DELETE' request to [news_posts] resource: post_id={post_id}")
+        
         db_sess = db_session.create_session()
         post = db_sess.query(NewsPost).get(post_id)
         
@@ -53,6 +58,8 @@ class NewsPostsResource(Resource):
 class NewsPostsListResource(Resource):
     @admin_or_token_required
     def get(self, **kwargs):
+        current_app.logger.info(f"'GET' request to [news_posts_list] resource")
+        
         db_sess = db_session.create_session()
         posts = db_sess.query(NewsPost).all()
         return jsonify({'posts': [item.to_dict(only=('id', 'post_tg_url')) for item in posts]})
@@ -60,6 +67,9 @@ class NewsPostsListResource(Resource):
     @admin_or_token_required
     def post(self, **kwargs):
         args = parser.parse_args()
+        
+        current_app.logger.info(f"'POST' request to [news_posts_list] resource: args=[{args}]")
+        
         db_sess = db_session.create_session()
         try:
             domain = url.split('/')[2]
