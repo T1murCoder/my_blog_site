@@ -41,7 +41,8 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="{{url_for('views.view_profile')}}"><i class="bi bi-person-circle"></i> Профиль</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Выйти</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('views.send_feedback')}}"><i class="bi bi-envelope"></i> Обратная связь</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('auth.logout')}}"><i class="bi bi-box-arrow-right"></i> Выйти</a></li>
                 </ul>
               </div>
             {% else %}

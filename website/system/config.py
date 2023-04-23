@@ -34,11 +34,15 @@ def get_logging_dict_config():
                 "filename": "logs/logs.log",
                 'maxBytes': 10485760,
                 'backupCount': 5,
+            },
+            "std": {
+                "class": "logging.StreamHandler",
+                "level": "ERROR"
             }
         },
         "loggers": {
             "app": {
-                "handlers": ["file"],
+                "handlers": ["file", "std"],
                 "level": "INFO"
             }
         }

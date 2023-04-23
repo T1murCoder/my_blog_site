@@ -5,10 +5,12 @@ from data.news_posts import NewsPost
 from data.comments import Comment
 from data.likes import Like
 from data.users import User
+from data.feedback import Feedback
 from .forms.CreateCommentForm import CommentForm
 from .forms.ChangePasswordForm import ChangePasswordForm
 from .forms.ChangeAvatarForm import ChangeAvatarForm
 from .forms.ChangeAboutForm import ChangeAboutForm
+from .forms.FeedbackForm import FeedbackForm
 from datetime import datetime
 from sqlalchemy import func
 import os
@@ -288,3 +290,25 @@ def edit_about():
     form.about.data = current_user.about
     
     return render_template('change_about.html', title='О себе', form=form, user=current_user)
+
+
+@views.route('/feedback', methods=['GET', 'POST'])
+def send_feedback():
+    form = FeedbackForm()
+    
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        
+        feedback = Feedback(
+            text=form.feedback.data,
+            author_id=current_user.id
+        )
+        
+        db_sess.add(feedback)
+        db_sess.commit()
+        
+        current_app.logger.info(f"User [{current_user.id}; {current_user.name}] has sent feedback: feedback_id={feedback.id}")
+        flash("Обратная связь отправлена!", "success")
+        return redirect(url_for('views.home'))
+        
+    return render_template("feedback.html", title='Обратная связь', form=form, user=current_user)
