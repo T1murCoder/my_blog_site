@@ -57,7 +57,7 @@
     <li>Установите <a href="https://git-scm.com/download/win">git</a>.</li>
     <li>Склонируйте репозиторий <code>git clone https://github.com/T1murCoder/my_blog_site.git</code>.</li>
     <li>Установите необходимые зависимости <code>py -m pip install -r requirements.txt</code>.</li>
-    <li>Создайте файл <code>.env</code> на основе <a href="https://github.com/T1murCoder/my_blog_site/files/11304722/cfg.txt">cfg.txt</a>.</li>
+    <li>Создайте файл <code>.env</code> на основе <a href="https://github.com/T1murCoder/my_blog_site/files/11304722/cfg.txt">cfg.txt</a> и положите в директорию с <code>app.py</code>.</li>
     <li>Запустите файл <code>app.py</code>.</li>
   </ol>
 </p>
