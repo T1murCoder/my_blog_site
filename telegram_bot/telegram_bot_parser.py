@@ -53,7 +53,7 @@ def send_welcome(message):
     bot.reply_to(message, """Здравствуй! Я бот созданный для парсинга телеграм каналов""")
 
 
-@bot.middleware_handler(update_types=['channel_post', 'edited_channel_post'])
+@bot.middleware_handler(update_types=['channel_post'])
 def update_handler(bot_instance, channel_post):
     if channel_post.chat.id not in valid_channels_ids:
         return
