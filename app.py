@@ -3,17 +3,18 @@ from data import db_session
 from flask_login import LoginManager
 from flask_restful import Api
 from website.api import users_resource, news_posts_resource
-from website.system.config import api_token, get_logging_dict_config
+from website.system.config import get_logging_dict_config
 from data.users import User
 from dotenv import load_dotenv
 import logging
 import logging.config
+import os
 
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = "my_super_secret_key"
-    app.config['API_TOKEN'] = api_token
+    app.config['API_TOKEN'] = os.getenv("API_TOKEN")
     login_manager = LoginManager()
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)

@@ -2,13 +2,7 @@ from flask import request, has_request_context
 import logging
 
 
-api_token = "HEAD_TOKEN"
-
 url = "http://localhost:8080/"
-
-request_params = {
-    'token': api_token
-}
 
 
 class CustomFormatter(logging.Formatter):

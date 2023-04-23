@@ -71,6 +71,7 @@ class NewsPostsListResource(Resource):
         current_app.logger.info(f"'POST' request to [news_posts_list] resource: args=[{args}]")
         
         db_sess = db_session.create_session()
+        url = args['url']
         try:
             domain = url.split('/')[2]
         except IndexError:
@@ -86,7 +87,7 @@ class NewsPostsListResource(Resource):
             return make_response(jsonify({'error': 'Такой пост уже есть!'}), 400)
         
         post = NewsPost(
-            post_tg_url=args['url'])
+            post_tg_url=url)
         db_sess.add(post)
         db_sess.commit()
         return jsonify({'success': 'OK'})

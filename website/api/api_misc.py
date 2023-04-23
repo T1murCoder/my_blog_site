@@ -40,7 +40,7 @@ def check_token(token):
     # TODO: Тут проверять токен в бд
     db_sess = db_session.create_session()
     tokens = map(lambda x: x.token, db_sess.query(Token).all())
-    if token == 'HEAD_TOKEN' or token in tokens:
+    if token == current_app.config['API_TOKEN'] or token in tokens:
         current_app.logger.info(f"Token [{token}] was used")
         return True
     current_app.logger.warning(f"Token [{token}] doesn't exist")
