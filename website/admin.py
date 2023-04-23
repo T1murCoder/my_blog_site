@@ -5,6 +5,7 @@ from .forms.admin.CreatePostForm import CreatePostForm
 from data.news_posts import NewsPost
 from data.tokens import Token
 from data.users import User
+from data.feedback import Feedback
 import requests
 from data import db_session
 from werkzeug.security import gen_salt
@@ -205,3 +206,15 @@ def delete_user(user_id):
         flash("Такого пользователя не существует...", "error")
     
     return redirect(url_for("admin.manage_users"))
+
+
+@admin.route('/feedback')
+def view_feedback_list():
+    db_sess = db_session.create_session()
+    feedback_list = db_sess.query(Feedback).all()
+    return render_template('feedback_list.html', feedback_list=feedback_list, title="Ответ на обратную связь", user=current_user)
+
+
+@admin.route('/feedback/<int:feedback_id>')
+def view_feedback():
+    return "feedback"
