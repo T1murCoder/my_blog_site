@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, abort, flash
+from flask import Blueprint, render_template, redirect, url_for, abort, flash, current_app
 from flask_login import login_user, login_required, logout_user, current_user
 from .forms.LoginForm import LoginForm
 from .forms.RegisterForm import RegisterForm
@@ -22,6 +22,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
+            current_app.logger.info(f"User has logged in: id={user.id}; name={user.name}")
             flash("Вы вошли в аккаунт!", category="success")
             return redirect(url_for('views.home'))
         flash("Неправильный логин или пароль.", category="error")
@@ -49,6 +50,7 @@ def sign_up():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
+        current_app.logger.info(f"New user has registered: id={user.id}; name={user.name}")
         flash("Вы зарегистрированы!", "success")
         return redirect(url_for('auth.login'))
     return render_template("signup.html", title='Регистрация', form=form, user=current_user)
@@ -58,6 +60,7 @@ def sign_up():
 @auth.route('/logout')
 @login_required
 def logout():
+    current_app.logger.info(f"User logged out: id={current_user.id}; name={current_user.name}")
     logout_user()
     flash("Вы вышли из аккаунта")
     return redirect("/")
@@ -81,10 +84,15 @@ def password_recovery():
         if not user:
             flash("Что-то пошло не так... Возможно вы указали неверную почту", "error")
             return redirect(url_for('auth.login'))
-        
-        send_password_reset_email(user)
-        flash("Письмо отправлено на почту!", "success")
-        return redirect(url_for('auth.login'))
+        try:
+            send_password_reset_email(user)
+            current_app.logger.info(f"The recovery email has been sent to {user.email}")
+            flash("Письмо отправлено на почту!", "success")
+            return redirect(url_for('auth.login'))
+        except TimeoutError:
+            current_app.logger.warning(f"Timeout Error")
+            flash("Что-то пошло не так... попробуйте чуть позже", "error")
+            return redirect(url_for('auth.login'))
             
     return render_template("password_recovery.html", title="Сброс пароля", form=form, user=current_user)
 
@@ -115,6 +123,7 @@ def reset_password(token):
         user.set_password(form.password.data)
         db_sess.commit()
         
+        current_app.logger.info(f"User has recovered the password: id={user.id}; name={user.name}")
         flash('Ваш пароль сброшен!', "success")
         return redirect(url_for('auth.login'))
     return render_template('reset_password.html', title='Сброс пароля', user=current_user, form=form)

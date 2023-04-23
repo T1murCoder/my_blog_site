@@ -1,11 +1,13 @@
-from flask import Flask
+from flask import Flask, has_request_context, request
 from data import db_session
 from flask_login import LoginManager
 from flask_restful import Api
 from website.api import users_resource, news_posts_resource
-from website.system.config import api_token
+from website.system.config import api_token, get_logging_dict_config
 from data.users import User
 from dotenv import load_dotenv
+import logging
+import logging.config
 
 
 def create_app():
@@ -18,6 +20,10 @@ def create_app():
     login_manager.login_message = "Пожалуйста, войдите в аккаунт"
     login_manager.login_message_category = "error"
     api = Api(app)
+    
+    logging.config.dictConfig(get_logging_dict_config())
+    logger = logging.getLogger("app")
+    app.logger = logger
 
     api.add_resource(users_resource.UsersListResource, '/api/v2/users', '/api/v2/users/<params>')
     api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>', '/api/v2/users/<int:user_id>/<params>')
