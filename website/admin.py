@@ -182,7 +182,7 @@ def change_admin_user(user_id):
         abort(404)
     
     user.admin = not user.admin
-    current_app.logger.info(f"User [{user.id}; {user.name}; {user.admin}] rights was changed by [{current_user.id}; {current_user.name}]")
+    current_app.logger.info(f"User's [{user.id}; {user.name}; {user.admin}] rights was changed by [{current_user.id}; {current_user.name}]")
     db_sess.commit()
     
     return redirect(url_for("admin.manage_users"))
