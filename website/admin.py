@@ -54,10 +54,10 @@ def create_post():
             return render_template("create_post.html", title='Create post', form=form, user=current_user)
         
         post_url = post_url.split('/', 3)[-1]
-        url_exists = db_sess.query(NewsPost).filter(NewsPost.post_tg_url == url).first()
+        url_exists = db_sess.query(NewsPost).filter(NewsPost.post_tg_url == post_url).first()
         
         if url_exists:
-            current_app.logger.warning(f"Post already exists: {post_url}")
+            current_app.logger.warning(f"Post already exists: url={post_url}")
             flash("Такой пост уже есть!", "warning")
             return render_template("create_post.html", title='Create post', form=form, user=current_user)
         
@@ -65,7 +65,9 @@ def create_post():
             post_tg_url=post_url)
         db_sess.add(post)
         db_sess.commit()
-        current_app.logger.info(f"Post is published by [{current_user.id}; {current_user.name}]: {post_url}")
+        
+        current_app.logger.info(f"Post is published by [{current_user.id}; {current_user.name}]: post_id={post.id}; post_url={post_url}")
+        
         flash("Пост опубликован!", "success")
         return redirect(url_for("admin.manage_posts"))
     return render_template("create_post.html", title='Create post', form=form, user=current_user)
@@ -138,9 +140,11 @@ def add_token():
     db_sess = db_session.create_session()
     token = Token()
     token.set_token(generate_token())
-    current_app.logger.info(f"Token was created by [{current_user.id}; {current_user.name}]")
     db_sess.add(token)
     db_sess.commit()
+    
+    current_app.logger.info(f"Token was created by [{current_user.id}; {current_user.name}]: token_id={token.id}")
+    
     back = request.referrer
     return redirect(back)
 
@@ -178,7 +182,7 @@ def change_admin_user(user_id):
         abort(404)
     
     user.admin = not user.admin
-    current_app.logger.info(f"[{user.id}; {user.name}; {user.admin}] rights was changed by [{current_user.id}; {current_user.name}]")
+    current_app.logger.info(f"User [{user.id}; {user.name}; {user.admin}] rights was changed by [{current_user.id}; {current_user.name}]")
     db_sess.commit()
     
     return redirect(url_for("admin.manage_users"))
@@ -194,7 +198,7 @@ def delete_user(user_id):
     
     response = requests.delete(url + f"api/v2/users/{user_id}/token={current_app.config['API_TOKEN']}")
     if response:
-        current_app.logger.info(f"[{user_id}] was changed by [{current_user.id}; {current_user.name}]")
+        current_app.logger.info(f"[{user_id}] was deleted by [{current_user.id}; {current_user.name}]")
         flash("Пользователь удалён!", "success")
     else:
         current_app.logger.warning(f"User doesn't exists: id={user_id}")

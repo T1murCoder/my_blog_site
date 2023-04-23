@@ -184,7 +184,7 @@ def edit_comment(comment_id):
 @views.route("/profile")
 @login_required
 def view_profile():
-    current_app.debug(f"User opened profile: user_id={current_user.id}, username={current_user.name}")
+    current_app.logger.debug(f"User opened profile: user_id={current_user.id}, username={current_user.name}")
     return render_template("user_profile.html", title='Профиль', user=current_user)
 
 
