@@ -2,7 +2,6 @@ Flask==2.2.3
 Flask-Login==0.6.2
 Flask-WTF==1.1.1
 Flask-RESTful==0.3.9
-Flask-JWT-Simple==0.0.3
 Jinja2==3.1.2
 SQLAlchemy==2.0.7
 SQLAlchemy-serializer==1.4.1
