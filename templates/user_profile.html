@@ -12,6 +12,7 @@
                     <a class="btn btn-outline-secondary btn-sm" href="{{url_for('views.change_avatar')}}"><i class="bi bi-pencil-square"></i> Изменить фото</a>
                 </div>
             <h1>{{user.name}}</h1>
+            <a class="btn btn-primary btn-sm" href="{{url_for('views.change_name')}}">Изменить</a>
         </div>
 
 
@@ -42,7 +43,8 @@
               </div>
             <br>
             <p class="card-text"><strong>Адрес электронной почты</strong><br>
-                {{user.email}}
+                {{user.email}}<br>
+                <a class="btn btn-primary btn-sm" href="{{url_for('views.change_email')}}">Изменить</a>
             </p>
             <p class="card-text"><strong>Пароль</strong><br>
                 ********<br>

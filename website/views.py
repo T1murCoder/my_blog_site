@@ -11,6 +11,8 @@ from .forms.ChangePasswordForm import ChangePasswordForm
 from .forms.ChangeAvatarForm import ChangeAvatarForm
 from .forms.ChangeAboutForm import ChangeAboutForm
 from .forms.FeedbackForm import FeedbackForm
+from .forms.ChangeNameForm import ChangeNameForm
+from .forms.ChangeEmailForm import ChangeEmailForm
 from datetime import datetime
 from sqlalchemy import func
 import os
@@ -313,3 +315,51 @@ def send_feedback():
         return redirect(url_for('views.home'))
         
     return render_template("feedback.html", title='Обратная связь', form=form, user=current_user)
+
+
+@views.route('/change_name', methods=['GET', 'POST'])
+def change_name():
+    form = ChangeNameForm()
+    
+    if form.validate_on_submit():
+        new_name = form.name.data
+        
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).get(current_user.id)
+        
+        current_app.logger.info(f"User {current_user} changed name to [{new_name}]")
+        
+        user.name = new_name
+        db_sess.commit()
+        flash("Имя изменено!", "success")
+        return redirect(url_for('views.view_profile'))
+    form.name.data = current_user.name
+    
+    return render_template("change_name.html", title='Изменить имя', form=form, user=current_user)
+
+
+@views.route('/change_email', methods=['GET', 'POST'])
+def change_email():
+    form = ChangeEmailForm()
+    
+    if form.validate_on_submit():
+        new_email = form.email.data
+        
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).get(current_user.id)
+        
+        email_exists = db_sess.query(User).filter(User.email == new_email).first()
+        
+        if email_exists:
+            current_app.logger.debug(f"User {current_user} tried to change email to [{new_email}]")
+            flash('Такая почта уже привязана!', 'error')
+            return redirect(url_for('views.view_profile'))
+        
+        current_app.logger.info(f"User {current_user} changed email to [{new_email}]")
+        
+        user.email = new_email
+        db_sess.commit()
+        flash("Почта изменена!", "success")
+        return redirect(url_for('views.view_profile'))
+    
+    return render_template("change_email.html", title='Изменить почту', form=form, user=current_user)

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container row">
+    <div class="col-lg-5 col-sm-7 mx-auto">
+  <form method="POST">
+    <a class="btn btn-primary" href="{{url_for('views.view_profile')}}">Назад</a>
+    <h3 align="center">Изменить почту</h3>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control") }}<br>
+        {% for error in form.email.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary mx-auto d-block col-lg-3 col-sm-5") }}</p>
+  </form>
+  </div>
+
+
+{% endblock %}
